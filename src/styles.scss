@@ -13,17 +13,18 @@ html {
 body {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 app-background-page {
-    position: absolute;
+    position: fixed;
     background: #000a16;
     z-index: -1;
     inset: 0;
 }
 
 app-header {
-    position: absolute;
+    position: fixed;
     z-index: 100;
     width: 100%;
 }

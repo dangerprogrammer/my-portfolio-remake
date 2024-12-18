@@ -1,0 +1,21 @@
+.scroll-test {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 100vh;
+    width: 100vw;
+    translate: none !important;
+
+    &:nth-child(1) {
+        background: #800;
+    }
+
+    &:nth-child(2) {
+        background: #080;
+    }
+
+    &:nth-child(3) {
+        background: #008;
+    }
+}

@@ -1,0 +1,35 @@
+@import url('@/assets/fonts/poppins-font.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: dark;
+    overflow: hidden;
+}
+
+body {
+    font-family: Poppins;
+    font-size: clamp(.85rem, 3vw, 1rem);
+}
+
+svg {
+    font-size: 1em;
+    height: 1em;
+    width: 1em;
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+[data-click] > * {
+    pointer-events: none;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}

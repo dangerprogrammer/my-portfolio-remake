@@ -1,0 +1,27 @@
+.pages {
+    height: 100vh;
+    background: #0c101c;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    // scroll-behavior: smooth;
+    // scroll-snap-type: y mandatory;
+
+    .pagesContent {
+        height: 100%;
+        display: flex;
+
+        >* {
+            padding: 3em;
+            background-color: red;
+            height: inherit;
+            width: 100%;
+            flex-shrink: 0;
+            // scroll-snap-align: center;
+
+            &.activeContainer {
+                z-index: 10;
+            }
+        }
+    }
+}

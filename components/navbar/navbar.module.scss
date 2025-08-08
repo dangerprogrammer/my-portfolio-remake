@@ -1,0 +1,81 @@
+.navbarStyles {
+    position: fixed;
+    width: 100%;
+    padding: 1em 4vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    user-select: none;
+
+    .preloaderContainer {
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .titleNav {
+        z-index: 10;
+
+        &.noClick {
+            pointer-events: none;
+        }
+
+        * {
+            cursor: pointer;
+        }
+    }
+
+    a.titleNav {
+        text-decoration: none;
+        color: inherit;
+        transition: opacity .2s ease-in-out;
+
+        &:hover {
+            opacity: .8;
+        }
+    }
+
+    .socialMedia {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        font-size: 2.5em;
+
+        .mediaContainer {
+            list-style: none;
+            font-size: 1em;
+            color: #eee;
+            translate: 0 -2em;
+
+            &.showItem {
+                animation: animateMedia .4s ease-in-out forwards;
+            }
+
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #eee;
+                transition: opacity .2s ease-in-out;
+
+                &:hover {
+                    opacity: .6;
+                }
+            }
+        }
+    }
+}
+
+@keyframes animateMedia {
+    from {
+        translate: 0 -2em;
+    }
+    to {
+        translate: 0;
+    }
+}

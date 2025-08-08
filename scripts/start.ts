@@ -22,13 +22,13 @@ function renderNav() {
 function renderScrolling() {
   ScrollSmoother.create({
     content: `.${pagesStyles.pages}`,
-    smooth: 2,
+    smooth: 1.5,
     normalizeScroll: true,
     ignoreMobileResize: true
   });
 
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
-  const items = gsap.utils.toArray<Element>(`.${pageStyles}`);
+  const items = gsap.utils.toArray<Element>(`.${pageStyles.page}`);
 
   let pinWrapWidth = pinWrap.scrollWidth;
   let horizontalScrollLength = pinWrapWidth - window.innerWidth;

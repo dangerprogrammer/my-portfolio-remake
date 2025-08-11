@@ -6,6 +6,8 @@ import pageStyles from '@/components/pages/index.module.scss';
 import { gsap } from "gsap";
 import { ScrollTrigger } from 'gsap/all';
 import pagesList from '@/components/pages';
+import { Dispatch, SetStateAction } from 'react';
+import { page } from '@/types';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,7 +21,7 @@ function renderNav() {
   mediaContainers.forEach(mediaContainer => mediaContainer.classList.add(navbarStyles.showItem));
 }
 
-function renderScrolling() {
+function renderScrolling(setActivePage: Dispatch<SetStateAction<string>>) {
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
   const items = gsap.utils.toArray<Element>(`.${pageStyles.page}`);
 
@@ -54,7 +56,7 @@ function renderScrolling() {
   });
 
   items.forEach((item, i) =>
-    pagesList[i].timeline(itemTimeline, item)
+    pagesList[i].timeline(itemTimeline, item, setActivePage)
   );
 
   function snapToClosest() {
@@ -87,10 +89,10 @@ function renderScrolling() {
   }
 }
 
-function renderPage() {
+function renderPage(setActivePage: Dispatch<SetStateAction<string>>) {
   renderNav();
 
-  renderScrolling();
+  renderScrolling(setActivePage);
 }
 
 export { renderPage };

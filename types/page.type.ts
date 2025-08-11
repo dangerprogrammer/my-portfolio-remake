@@ -1,11 +1,11 @@
-import { JSX } from "react";
+import { Dispatch, JSX, SetStateAction } from "react";
 
 export type page = {
     Element: () => JSX.Element;
     url: string;
     Page?: () => JSX.Element;
     title: string;
-    timeline: (tl: gsap.core.Timeline, elem: Element) => void;
+    timeline: (tl: gsap.core.Timeline, elem: Element, setActivePage: Dispatch<SetStateAction<string>>) => void;
     Icon: any;
     visible?: boolean;
 }

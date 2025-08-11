@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 import AboutMePage, { AboutMeHeader } from "./about-me/about-me";
 import WelcomeHeader from "./welcome/welcome";
@@ -10,24 +10,24 @@ import Person from '@/assets/svgs/person.svg';
 
 import { page } from "@/types";
 
-let pagesList: page[] = [
+const pagesList: page[] = [
   {
-    Element: WelcomeHeader, url: "/welcome", title: "Welcome", Icon: Rocket, timeline: function (tl, item) {
-      ShowElement(tl, item, this, () => {
-        console.log(item);
+    Element: WelcomeHeader, url: "/welcome", title: "Welcome", Icon: Rocket, timeline: function (tl, item, setActivePage) {
+      ShowElement(tl, item, setActivePage, this, () => {
+        console.log(pagesList);
       })
     }
   },
   {
-    Element: AboutMeHeader, url: "/about-me", Page: AboutMePage, title: "About Me", Icon: Person, timeline: function (tl, item) {
-      ShowElement(tl, item, this, () => {
+    Element: AboutMeHeader, url: "/about-me", Page: AboutMePage, title: "About Me", Icon: Person, timeline: function (tl, item, setActivePage) {
+      ShowElement(tl, item, setActivePage, this, () => {
         console.log("item full visible 2");
       })
     }
   }
 ];
 
-function ShowElement(tl: gsap.core.Timeline, item: Element, that: page, show: Function) {
+function ShowElement(tl: gsap.core.Timeline, item: Element, setActivePage: Dispatch<SetStateAction<string>>, that: page, show: Function) {
   let snapTimeout: NodeJS.Timeout;
 
   tl.to(item, {
@@ -42,7 +42,10 @@ function ShowElement(tl: gsap.core.Timeline, item: Element, that: page, show: Fu
           if (fullyVisible(item)) snapTimeout = setTimeout(() => {
             show();
 
+            pagesList.map(page => page.visible = !1);
             that.visible = !0;
+
+            setActivePage(that.title);
           }, pagesList.find(({ visible }) => visible) ? 0 : 1000);
         }, 500);
       }

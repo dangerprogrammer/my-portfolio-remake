@@ -7,7 +7,7 @@ const ContextApp = createContext({});
 
 function ContextProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname(),
-        [ history, setHistory ] = useState([pathname])
+        [ history, setHistory ] = useState([pathname]);
 
     return <ContextApp.Provider value={{ history, setHistory }}>
         {children}

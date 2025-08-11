@@ -9,12 +9,10 @@ import { useEffect } from "react";
 function Home() {
   useEffect(renderPage, []);
 
-  console.log(pagesList);
-
   return <>
     <Navbar />
     <Pages>
-      { pagesList.map((Page, ind) => <Page key={ind}/>) }
+      { pagesList.map(({ Element }, ind) => <Element key={ind}/>) }
     </Pages>
   </>
 }

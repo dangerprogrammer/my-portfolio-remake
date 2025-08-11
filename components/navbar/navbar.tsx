@@ -13,6 +13,7 @@ function Navbar() {
             <Loader transitionDelay='.03s' backgroundColor='white' zIndex='0' />
         </span>
         <a className={styles.titleNav} style={{ cursor: 'pointer' }} href="/"><h1>Portfolio</h1></a>
+        <span>line</span>
         <ul className={styles.socialMedia}>
             {social.map(({ link, Icon }, ind) => <li key={ind} className={styles.mediaContainer} style={{ animationDelay: `${9e2 - ind * 1e2}ms` }}>
                 <Link href={link} target='_blank'>

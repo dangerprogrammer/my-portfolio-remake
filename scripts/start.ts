@@ -4,52 +4,58 @@ import pagesStyles from '@/components/pages/pages.module.scss';
 import pageStyles from '@/components/pages/index.module.scss';
 
 import { gsap } from "gsap";
-import { ScrollTrigger, ScrollSmoother } from 'gsap/all';
+import { ScrollTrigger } from 'gsap/all';
+import pagesList from '@/components/pages';
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger);
 
 function renderNav() {
   const preloaders = document.querySelectorAll(`[class*="${loaderStyles.loader}"]`),
     mediaContainers = document.querySelectorAll(`[class*="${navbarStyles.mediaContainer}"]`),
-    navbarTitle = document.querySelector(`[class*="${navbarStyles.titleNav}"]`)!,
-    { pathname } = location;
+    navbarTitle = document.querySelector(`[class*="${navbarStyles.titleNav}"]`)!;
 
-  navbarTitle.classList.toggle(navbarStyles.noClick, pathname == '/');
+  navbarTitle.classList.toggle(navbarStyles.noClick, location.pathname == '/');
   preloaders.forEach(preloader => preloader.classList.remove(loaderStyles.notRendered));
   mediaContainers.forEach(mediaContainer => mediaContainer.classList.add(navbarStyles.showItem));
 }
 
 function renderScrolling() {
-  ScrollSmoother.create({
-    content: `.${pagesStyles.pages}`,
-    smooth: 1.5,
-    normalizeScroll: true,
-    ignoreMobileResize: true
-  });
-
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
   const items = gsap.utils.toArray<Element>(`.${pageStyles.page}`);
 
   let pinWrapWidth = pinWrap.scrollWidth;
   let horizontalScrollLength = pinWrapWidth - window.innerWidth;
-  let snapTimeout: any;
+  let snapTimeout: NodeJS.Timeout;
 
-  // Pinning and horizontal scrolling
-  const trigger = gsap.to(pinWrap, {
+  const mainTimeline = gsap.timeline({
     scrollTrigger: {
-      scrub: true,
+      scrub: 1,
       trigger: pinWrap,
-      pin: pinWrap,
-      end: () => `+=${pinWrapWidth}`,
+      pin: !0,
+      end: () => `+=${pinWrap.clientWidth}`,
       onUpdate: () => {
         clearTimeout(snapTimeout);
 
-        snapTimeout = setTimeout(() => snapToClosest(), 150);
+        snapTimeout = setTimeout(() => snapToClosest(), 500);
       }
-    },
-    x: () => -horizontalScrollLength,
+    }
+  });
+
+  const trigger = mainTimeline.to(items, {
+    xPercent: -100 * (items.length - 1),
     ease: "none"
   });
+
+  const itemTimeline = gsap.timeline({
+    scrollTrigger: {
+      scrub: 1,
+      trigger: `.${pageStyles.page}`
+    }
+  });
+
+  items.forEach((item, i) =>
+    pagesList[i].timeline(itemTimeline, item)
+  );
 
   function snapToClosest() {
     const center = window.innerWidth / 2;

@@ -40,6 +40,13 @@
         }
     }
 
+    .pagesHeader {
+        position: absolute;
+        height: 2em;
+        width: 3px;
+        background-color: currentColor;
+    }
+
     .socialMedia {
         display: flex;
         flex-direction: row;

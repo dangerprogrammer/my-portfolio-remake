@@ -1,5 +1,11 @@
-function AboutMe() {
-    return <section>About Me!</section>
+function AboutMePage() {
+    return <section>About Me Page!</section>
 }
 
-export default AboutMe;
+function AboutMeHeader() {
+    return <span>About Me Header!</span>
+}
+
+export { AboutMeHeader };
+
+export default AboutMePage;

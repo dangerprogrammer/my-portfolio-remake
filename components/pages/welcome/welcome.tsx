@@ -1,5 +1,5 @@
-function Welcome() {
-    return <section>Welcome!</section>
+function WelcomeHeader() {
+    return <span>Welcome!</span>
 }
 
-export default Welcome;
+export default WelcomeHeader;

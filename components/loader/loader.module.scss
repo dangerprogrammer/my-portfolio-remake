@@ -1,12 +1,12 @@
 .loader {
     position: absolute;
     background-color: black;
-    inset: -10em;
-    clip-path: circle(0vmax at 0 0);
+    inset: 0;
+    clip-path: circle(0vmax at 50% 1em);
     transition: clip-path 1s ease-in-out;
     pointer-events: auto;
 }
 
 .notRendered {
-    clip-path: circle(200vmax at 0 0);
+    clip-path: circle(150vmax at 50% 0);
 }

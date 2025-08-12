@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/all';
 import pagesList from '@/components/pages';
 import { Dispatch, SetStateAction } from 'react';
 import { page } from '@/types';
+import { updateNavbarTitles } from '@/components/navbar/navbar';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,6 +22,8 @@ function renderNav() {
   mediaContainers.forEach(mediaContainer => mediaContainer.classList.add(navbarStyles.showItem));
 }
 
+let scrollProgress: number = 0;
+
 function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
   const items = gsap.utils.toArray<Element>(`.${pageStyles.page}`);
@@ -29,23 +32,38 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   let horizontalScrollLength = pinWrapWidth - window.innerWidth;
   let snapTimeout: NodeJS.Timeout;
 
+  let firstUpdate: boolean = !0;
   const mainTimeline = gsap.timeline({
     scrollTrigger: {
       scrub: 1,
       trigger: pinWrap,
       pin: !0,
       end: () => `+=${pinWrap.clientWidth}`,
-      onUpdate: () => {
+      onUpdate: ev => {
         clearTimeout(snapTimeout);
 
-        snapTimeout = setTimeout(() => snapToClosest(), 500);
+        snapTimeout = setTimeout(() => snapToClosest(), firstUpdate ? 0 : 500);
+
+        scrollProgress = ev.progress;
+        if (firstUpdate) firstUpdate = !1;
       }
-    }
+    },
   });
 
   const trigger = mainTimeline.to(items, {
     xPercent: -100 * (items.length - 1),
     ease: "none"
+  });
+
+  gsap.to(pinWrap, {
+    backgroundColor: 'inherit',
+    duration: 0
+  });
+
+  gsap.to(pinWrap, {
+    backgroundColor: '#080c1a',
+    delay: 1,
+    duration: 1
   });
 
   const itemTimeline = gsap.timeline({
@@ -83,7 +101,7 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
 
       window.scrollTo({
         top: targetScrollY,
-        behavior: "smooth"
+        behavior: firstUpdate ? "auto" : "smooth"
       });
     }
   }
@@ -96,3 +114,5 @@ function renderPage(setActivePage: Dispatch<SetStateAction<page>>) {
 }
 
 export { renderPage };
+
+export { scrollProgress };

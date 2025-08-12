@@ -1,6 +1,5 @@
 .pages {
     min-height: 100vh;
-    background: #0c101c;
 
     .pagesContent {
         height: 100vh;
@@ -10,12 +9,6 @@
             height: 100%;
             width: 100%;
             display: flex;
-
-            >* {
-                &.activeContainer {
-                    z-index: 10;
-                }
-            }
         }
     }
 }

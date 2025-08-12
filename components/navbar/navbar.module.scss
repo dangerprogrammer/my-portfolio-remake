@@ -48,6 +48,9 @@
         display: flex;
         flex-direction: column;
         gap: .5em;
+        font-family: 'Quicksand';
+        font-weight: 700;
+        pointer-events: none;
 
         .lineBar {
             display: block;
@@ -59,16 +62,34 @@
 
         .headerList {
             display: grid;
-            grid-template-columns: 2fr 3fr 2fr;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            width: 25em;
             gap: 1em;
 
             li {
                 list-style: none;
                 display: flex;
-                justify-content: center;
+                line-height: 1.4em;
+                overflow-y: auto;
+
+                span {
+                    display: flex;
+                    justify-content: center;
+                    width: 101%;
+                    flex-shrink: 0;
+                }
+
+                &:first-child span {
+                    justify-content: end;
+                }
+
+                &:last-child span {
+                    justify-content: start;
+                }
             }
 
             .mainPageHeader {
+                text-align: center;
                 font-size: 1.4em;
             }
         }

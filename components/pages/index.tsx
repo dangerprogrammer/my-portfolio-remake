@@ -58,30 +58,30 @@ function ShowElement(tl: gsap.core.Timeline, item: Element, setActivePage: Dispa
 
             updateNavbarTitles(scrollProgress);
 
-            if (firstTime) firstTime = !1;
+            firstTime = !1;
           };
         } else {
           clearInterval(snapTimeout);
 
           snapTimeout = setTimeout(() => {
-            if (fullyVisible(item)) {
-              show();
-
-              pagesList.map(page => page.visible = !1);
-              that.visible = !0;
-
-              setActivePage(that);
-
-              updateNavbarTitles(scrollProgress);
-
-              if (firstTime) firstTime = !1;
-            };
+            if (fullyVisible(item)) show();
           }, 500);
         };
       }
     }
   });
 };
+
+function UpdateElement(itemPage: page, setActivePage: Dispatch<SetStateAction<page>>) {
+    pagesList.map(page => page.visible = !1);
+    itemPage.visible = !0;
+
+    setActivePage(itemPage);
+
+    updateNavbarTitles(pagesList.indexOf(itemPage) / (pagesList.length - 1));
+};
+
+export { UpdateElement };
 
 function fullyVisible(el: Element) {
   const rect = el.getBoundingClientRect();

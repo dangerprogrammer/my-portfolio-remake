@@ -62,7 +62,9 @@ function updateNavbarTitles(progress: number) {
         gsap.to(scroll, {
             scrollTo: {
                 x: (scroll.scrollWidth - scroll.clientWidth) * (progress * (pagesList.length - 1) / (embbedList.length - 1) + i / (embbedList.length - 1))
-            }
+            },
+            duration: .5,
+            delay: .3
         });
     });
 

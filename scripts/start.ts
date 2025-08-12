@@ -5,7 +5,7 @@ import pageStyles from '@/components/pages/index.module.scss';
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from 'gsap/all';
-import pagesList from '@/components/pages';
+import pagesList, { UpdateElement } from '@/components/pages';
 import { Dispatch, SetStateAction } from 'react';
 import { page } from '@/types';
 import { updateNavbarTitles } from '@/components/navbar/navbar';
@@ -33,6 +33,7 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   let snapTimeout: NodeJS.Timeout;
 
   let firstUpdate: boolean = !0;
+  let isSnapping: boolean = !1;
   const mainTimeline = gsap.timeline({
     scrollTrigger: {
       scrub: 1,
@@ -40,9 +41,17 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
       pin: !0,
       end: () => `+=${pinWrap.clientWidth}`,
       onUpdate: ev => {
+        if (isSnapping) return;
+        
         clearTimeout(snapTimeout);
 
-        snapTimeout = setTimeout(() => snapToClosest(), firstUpdate ? 0 : 500);
+        snapTimeout = setTimeout(() => {
+          isSnapping = !0;
+
+          snapToClosest()!.then(() => {
+            isSnapping = !1;
+          });
+        }, firstUpdate ? 0 : 500);
 
         scrollProgress = ev.progress;
         if (firstUpdate) firstUpdate = !1;
@@ -99,10 +108,15 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
       const progress = targetX / horizontalScrollLength;
       const targetScrollY = progress * trigger.scrollTrigger!.end;
 
-      window.scrollTo({
-        top: targetScrollY,
-        behavior: firstUpdate ? "auto" : "smooth"
+      UpdateElement(pagesList[index], setActivePage);
+
+      return new Promise(resolve => {
+        gsap.to(window, {
+        scrollTo: { y: targetScrollY },
+        duration: firstUpdate ? 0 : .5,
+        onComplete: resolve
       });
+      })
     }
   }
 }

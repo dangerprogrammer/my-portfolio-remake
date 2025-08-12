@@ -4,13 +4,14 @@ import social from '@/assets/social';
 import Loader from '../loader/loader';
 import styles from './navbar.module.scss';
 import Link from 'next/link';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
+import { page } from '@/types';
 
-function Navbar({ activePage, setActivePage, ...contexts }: { activePage: string, setActivePage: Dispatch<SetStateAction<string>> }) {
-    let atualPage: string | undefined = activePage;
+function Navbar({ activePage }: { activePage: page }) {
+    let atualPage: string | undefined = activePage.title;
 
     useEffect(() => {
-        atualPage = activePage;
+        atualPage = activePage.title;
     }, [activePage]);
 
     return <nav className={styles.navbarStyles}>
@@ -31,7 +32,7 @@ function Navbar({ activePage, setActivePage, ...contexts }: { activePage: string
         <ul className={styles.socialMedia}>
             {social.map(({ link, Icon }, ind) => <li key={ind} className={styles.mediaContainer} style={{ animationDelay: `${9e2 - ind * 1e2}ms` }}>
                 <Link href={link} target='_blank'>
-                    <Icon />
+                    <Icon/>
                 </Link>
             </li>)}
         </ul>

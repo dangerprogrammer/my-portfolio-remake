@@ -5,7 +5,7 @@ export type page = {
     url: string;
     Page?: () => JSX.Element;
     title: string;
-    timeline: (tl: gsap.core.Timeline, elem: Element, setActivePage: Dispatch<SetStateAction<string>>) => void;
+    timeline: (tl: gsap.core.Timeline, elem: Element, setActivePage: Dispatch<SetStateAction<page>>) => void;
     Icon: any;
     visible?: boolean;
 }

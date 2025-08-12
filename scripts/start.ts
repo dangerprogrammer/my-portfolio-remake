@@ -21,7 +21,7 @@ function renderNav() {
   mediaContainers.forEach(mediaContainer => mediaContainer.classList.add(navbarStyles.showItem));
 }
 
-function renderScrolling(setActivePage: Dispatch<SetStateAction<string>>) {
+function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
   const items = gsap.utils.toArray<Element>(`.${pageStyles.page}`);
 
@@ -89,7 +89,7 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<string>>) {
   }
 }
 
-function renderPage(setActivePage: Dispatch<SetStateAction<string>>) {
+function renderPage(setActivePage: Dispatch<SetStateAction<page>>) {
   renderNav();
 
   renderScrolling(setActivePage);

@@ -27,7 +27,7 @@ const pagesList: page[] = [
   }
 ];
 
-function ShowElement(tl: gsap.core.Timeline, item: Element, setActivePage: Dispatch<SetStateAction<string>>, that: page, show: Function) {
+function ShowElement(tl: gsap.core.Timeline, item: Element, setActivePage: Dispatch<SetStateAction<page>>, that: page, show: Function) {
   let snapTimeout: NodeJS.Timeout;
 
   tl.to(item, {
@@ -45,7 +45,7 @@ function ShowElement(tl: gsap.core.Timeline, item: Element, setActivePage: Dispa
             pagesList.map(page => page.visible = !1);
             that.visible = !0;
 
-            setActivePage(that.title);
+            setActivePage(that);
           }, pagesList.find(({ visible }) => visible) ? 0 : 1000);
         }, 500);
       }

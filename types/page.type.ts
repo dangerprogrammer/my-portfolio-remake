@@ -1,7 +1,7 @@
 import { Dispatch, JSX, SetStateAction } from "react";
 
 export type page = {
-    Element: () => JSX.Element;
+    Element?: () => JSX.Element;
     url: string;
     Page?: () => JSX.Element;
     title: string;

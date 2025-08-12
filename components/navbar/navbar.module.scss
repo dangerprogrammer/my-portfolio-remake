@@ -42,14 +42,17 @@
 
     .pagesHeader {
         position: absolute;
+        font-size: .85em;
         top: 1em;
         left: 50%;
         translate: -50% 0;
         display: flex;
         flex-direction: column;
         gap: .5em;
-        font-family: 'Quicksand';
-        font-weight: 700;
+        // font-family: 'Quicksand';
+        // font-weight: 700;
+        font-family: 'Chocolate Classical Sans';
+        font-weight: 400;
         pointer-events: none;
 
         .lineBar {
@@ -58,6 +61,8 @@
             width: 2px;
             margin-inline: auto;
             background-color: currentColor;
+            scale: 1 0;
+            transform-origin: top;
         }
 
         .headerList {
@@ -77,6 +82,11 @@
                     justify-content: center;
                     width: 101%;
                     flex-shrink: 0;
+                    translate: 0 -101%;
+                }
+
+                &:first-child, &:last-child {
+                    opacity: .5;
                 }
 
                 &:first-child span {

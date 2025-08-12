@@ -14,9 +14,9 @@ function Home() {
   useEffect(() => renderPage(contexts.setActivePage), []);
 
   return <>
-    <Navbar {...contexts} />
+    <Navbar />
     <Pages>
-      {pagesList.map(({ Element }, ind) => <Element {...contexts} key={ind} />)}
+      {pagesList.filter(({ Element }) => Element).map(({ Element }, ind) => (Element = Element!, <Element {...contexts} key={ind} />))}
     </Pages>
   </>
 }

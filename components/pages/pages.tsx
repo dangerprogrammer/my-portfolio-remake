@@ -1,3 +1,4 @@
+
 import styles from './pages.module.scss';
 
 function Pages({ children }: Readonly<{ children: React.ReactNode }>) {

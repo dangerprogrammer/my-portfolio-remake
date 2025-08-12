@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 
-import AboutMePage, { AboutMeHeader } from "./about-me/about-me";
+import AboutMePage from "./about-me/about-me";
+import SkillsPage from "./skills/skills";
 import WelcomeHeader from "./welcome/welcome";
 
 import styles from './index.module.scss';
@@ -9,9 +10,7 @@ import Rocket from '@/assets/svgs/rocket.svg';
 import Person from '@/assets/svgs/person.svg';
 
 import { page } from "@/types";
-import SkillsPage, { SkillsHeader } from "./skills/skills";
 import { updateNavbarTitles } from "../navbar/navbar";
-import { scrollProgress } from "@/scripts/start";
 
 const pagesList: page[] = [
   {
@@ -22,14 +21,14 @@ const pagesList: page[] = [
     }
   },
   {
-    Element: AboutMeHeader, url: "/about-me", Page: AboutMePage, title: "About Me", Icon: Person, timeline: function (tl, item, setActivePage) {
+    url: "/about-me", Page: AboutMePage, title: "About Me", Icon: Person, timeline: function (tl, item, setActivePage) {
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 2");
       })
     }
   },
   {
-    Element: SkillsHeader, url: "/skills", Page: SkillsPage, title: "Skills", Icon: Person, timeline: function (tl, item, setActivePage) {
+    url: "/skills", Page: SkillsPage, title: "Skills", Icon: Person, timeline: function (tl, item, setActivePage) {
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 3");
       })
@@ -55,8 +54,6 @@ function ShowElement(tl: gsap.core.Timeline, item: Element, setActivePage: Dispa
             that.visible = !0;
 
             setActivePage(that);
-
-            updateNavbarTitles(scrollProgress);
 
             firstTime = !1;
           };
@@ -89,7 +86,9 @@ function fullyVisible(el: Element) {
   return rect.left >= -100 && rect.right <= window.innerWidth + 100;
 }
 
-pagesList.forEach(({ Element }, i) => {
+pagesList.filter(({ Element }) => Element).forEach(({ Element }, i) => {
+  Element = Element!;
+  
   pagesList[i].Element = () => <section className={styles.page}>
     <Element />
   </section>

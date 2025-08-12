@@ -8,7 +8,6 @@ import { ScrollTrigger } from 'gsap/all';
 import pagesList, { UpdateElement } from '@/components/pages';
 import { Dispatch, SetStateAction } from 'react';
 import { page } from '@/types';
-import { updateNavbarTitles } from '@/components/navbar/navbar';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,9 +19,25 @@ function renderNav() {
   navbarTitle.classList.toggle(navbarStyles.noClick, location.pathname == '/');
   preloaders.forEach(preloader => preloader.classList.remove(loaderStyles.notRendered));
   mediaContainers.forEach(mediaContainer => mediaContainer.classList.add(navbarStyles.showItem));
-}
 
-let scrollProgress: number = 0;
+  const headerLine = document.querySelector(`.${navbarStyles.lineBar}`)!;
+  gsap.to(headerLine, {
+    scaleY: 1,
+    delay: 1.2,
+    duration: .3
+  });
+
+  const headerPages = gsap.utils.toArray<Element>(`.${navbarStyles.headerList} > li`);
+
+  headerPages.forEach((h, i) => {
+    const spans = h.querySelectorAll<Element>('span');
+
+    gsap.to(spans, {
+      translateY: 0,
+      delay: i == 1 ? 1.4 : 1.6
+    });
+  });
+}
 
 function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
@@ -40,9 +55,9 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
       trigger: pinWrap,
       pin: !0,
       end: () => `+=${pinWrap.clientWidth}`,
-      onUpdate: ev => {
+      onUpdate: () => {
         if (isSnapping) return;
-        
+
         clearTimeout(snapTimeout);
 
         snapTimeout = setTimeout(() => {
@@ -52,8 +67,6 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
             isSnapping = !1;
           });
         }, firstUpdate ? 0 : 500);
-
-        scrollProgress = ev.progress;
         if (firstUpdate) firstUpdate = !1;
       }
     },
@@ -86,6 +99,22 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
     pagesList[i].timeline(itemTimeline, item, setActivePage)
   );
 
+  // setTimeout(() => {
+  //   let cItem: any = items[1];
+  //   const index = items.indexOf(cItem);
+  //   const targetX = index * cItem.offsetWidth - (window.innerWidth / 2 - cItem.offsetWidth / 2);
+
+  //   const progress = targetX / horizontalScrollLength;
+  //   const targetScrollY = progress * trigger.scrollTrigger!.end;
+
+  //   UpdateElement(pagesList[index], setActivePage);
+
+  //   gsap.to(window, {
+  //     scrollTo: { y: targetScrollY },
+  //     duration: 0
+  //   });
+  // }, 1e2);
+
   function snapToClosest() {
     const center = window.innerWidth / 2;
     let closestItem: any = null;
@@ -112,10 +141,10 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
 
       return new Promise(resolve => {
         gsap.to(window, {
-        scrollTo: { y: targetScrollY },
-        duration: firstUpdate ? 0 : .5,
-        onComplete: resolve
-      });
+          scrollTo: { y: targetScrollY },
+          duration: firstUpdate ? 0 : .5,
+          onComplete: resolve
+        });
       })
     }
   }
@@ -128,5 +157,3 @@ function renderPage(setActivePage: Dispatch<SetStateAction<page>>) {
 }
 
 export { renderPage };
-
-export { scrollProgress };

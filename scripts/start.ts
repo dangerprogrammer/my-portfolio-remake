@@ -5,9 +5,10 @@ import pageStyles from '@/components/pages/index.module.scss';
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from 'gsap/all';
-import pagesList, { UpdateElement } from '@/components/pages';
+import { UpdateElement } from '@/components/pages';
 import { Dispatch, SetStateAction } from 'react';
 import { page } from '@/types';
+import pagesList from '@/components/pages/pagesList';
 
 gsap.registerPlugin(ScrollTrigger);
 

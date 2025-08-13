@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/navbar/navbar";
 import Pages, { PagesHeader } from "@/components/pages/pages";
-import pagesList from "@/components/pages";
+import pagesList from "@/components/pages/pagesList";
 import { renderPage } from "@/scripts/start";
 import { useContext, useEffect } from "react";
 import { ContextApp } from "@/components/context/context";

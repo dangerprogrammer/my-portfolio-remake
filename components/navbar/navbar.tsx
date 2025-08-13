@@ -4,7 +4,7 @@ import social from '@/assets/social';
 import Loader from '../loader/loader';
 import styles from './navbar.module.scss';
 import Link from 'next/link';
-import pagesList from '../pages';
+import pagesList from '../pages/pagesList';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/all';
 

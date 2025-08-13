@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { createContext, useState } from "react";
-import pagesList from "../pages";
+import pagesList from "../pages/pagesList";
 import { Context } from "@/types";
 
 const ContextApp = createContext<Context>({} as Context);

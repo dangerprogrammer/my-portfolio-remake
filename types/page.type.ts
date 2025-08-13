@@ -11,7 +11,7 @@ export type page = {
     visible?: boolean;
 }
 
-type headerProps = {
+export type headerProps = {
     title: string;
     desc: string;
 };

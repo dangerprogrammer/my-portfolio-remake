@@ -1,5 +1,6 @@
 import styles from './pages.module.scss';
 import indexStyles from './index.module.scss';
+import { headerProps } from '@/types';
 
 function Pages({ children }: Readonly<{ children: React.ReactNode }>) {
     return <main className={styles.pages}>
@@ -11,8 +12,8 @@ function Pages({ children }: Readonly<{ children: React.ReactNode }>) {
     </main>
 }
 
-function PagesHeader() {
-    return <section className={indexStyles.page}>Header</section>
+function PagesHeader({ ...headerProps }: headerProps) {
+    return <section className={indexStyles.page}>{headerProps.title}</section>
 }
 
 export { PagesHeader };

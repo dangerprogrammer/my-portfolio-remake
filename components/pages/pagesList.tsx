@@ -16,7 +16,7 @@ const pagesList: page[] = [
         // console.log("item full visible 1");
       })
     }, headerProps: {
-      title: "",
+      title: "Welcome Title",
       desc: ""
     }
   },
@@ -26,7 +26,7 @@ const pagesList: page[] = [
         // console.log("item full visible 2");
       })
     }, headerProps: {
-      title: "",
+      title: "About Me Title",
       desc: ""
     }
   },
@@ -36,7 +36,7 @@ const pagesList: page[] = [
         // console.log("item full visible 3");
       })
     }, headerProps: {
-      title: "",
+      title: "Skills Title",
       desc: ""
     }
   }

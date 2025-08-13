@@ -48,46 +48,92 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   let horizontalScrollLength = pinWrapWidth - window.innerWidth;
   let snapTimeout: NodeJS.Timeout;
 
-  let firstUpdate: boolean = !0;
-  let isSnapping: boolean = !1;
+  let firstUpdate = true;
+  let isSnapping = false;
+
+  const fixedIndex = 1;
+  const fixedItem = items[fixedIndex];
+  const movingItems = items.filter((_, i) => i !== fixedIndex);
+
   const mainTimeline = gsap.timeline({
     scrollTrigger: {
       scrub: 1,
       trigger: pinWrap,
-      pin: !0,
+      pin: true,
       end: () => `+=${pinWrap.clientWidth}`,
       onUpdate: () => {
         if (isSnapping) return;
-
         clearTimeout(snapTimeout);
-
         snapTimeout = setTimeout(() => {
-          isSnapping = !0;
-
-          snapToClosest()!.then(() => {
-            isSnapping = !1;
-          });
+          // isSnapping = true;
+          // snapToClosest()?.then(() => {
+          //   isSnapping = false;
+          // });
         }, firstUpdate ? 0 : 500);
-        if (firstUpdate) firstUpdate = !1;
+        if (firstUpdate) firstUpdate = false;
       }
-    },
+    }
   });
 
-  const trigger = mainTimeline.to(items, {
+  // Anima apenas os outros itens
+  mainTimeline.to(movingItems, {
     xPercent: -100 * (items.length - 1),
     ease: "none"
+  }, 0);
+
+  // ===== FIXO ENTRE DOIS PONTOS =====
+  const itemWidth = fixedItem.clientWidth;
+  const startScroll = (itemWidth * fixedIndex) / horizontalScrollLength * mainTimeline.scrollTrigger!.end;
+  const endScroll = startScroll + 500; // 500px de scroll vertical (ajuste aqui)
+
+  ScrollTrigger.create({
+    trigger: pinWrap,
+    start: startScroll,
+    end: endScroll,
+    onEnter: () => {
+      gsap.set(fixedItem, {
+        position: "fixed",
+        left: "50%",
+        top: "50%",
+        xPercent: -50,
+        yPercent: -50,
+        zIndex: 10
+      });
+    },
+    onLeave: () => {
+      gsap.set(fixedItem, {
+        position: "absolute",
+        left: `${fixedIndex * 100}%`,
+        top: "0%",
+        xPercent: 0,
+        yPercent: 0,
+        zIndex: ""
+      });
+    },
+    onEnterBack: () => {
+      gsap.set(fixedItem, {
+        position: "fixed",
+        left: "50%",
+        top: "50%",
+        xPercent: -50,
+        yPercent: -50,
+        zIndex: 10
+      });
+    },
+    onLeaveBack: () => {
+      gsap.set(fixedItem, {
+        position: "absolute",
+        left: `${fixedIndex * 100}%`,
+        top: "0%",
+        xPercent: 0,
+        yPercent: 0,
+        zIndex: ""
+      });
+    }
   });
 
-  gsap.to(pinWrap, {
-    backgroundColor: 'inherit',
-    duration: 0
-  });
-
-  gsap.to(pinWrap, {
-    backgroundColor: '#080c1a',
-    delay: 1,
-    duration: 1
-  });
+  gsap.to(pinWrap, { backgroundColor: 'inherit', duration: 0 });
+  gsap.to(pinWrap, { backgroundColor: '#080c1a', delay: 1, duration: 1 });
 
   const itemTimeline = gsap.timeline({
     scrollTrigger: {
@@ -99,22 +145,6 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   items.forEach((item, i) =>
     pagesList[i].timeline(itemTimeline, item, setActivePage)
   );
-
-  // setTimeout(() => {
-  //   let cItem: any = items[1];
-  //   const index = items.indexOf(cItem);
-  //   const targetX = index * cItem.offsetWidth - (window.innerWidth / 2 - cItem.offsetWidth / 2);
-
-  //   const progress = targetX / horizontalScrollLength;
-  //   const targetScrollY = progress * trigger.scrollTrigger!.end;
-
-  //   UpdateElement(pagesList[index], setActivePage);
-
-  //   gsap.to(window, {
-  //     scrollTo: { y: targetScrollY },
-  //     duration: 0
-  //   });
-  // }, 1e2);
 
   function snapToClosest() {
     const center = window.innerWidth / 2;
@@ -136,17 +166,17 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
       const targetX = index * closestItem.offsetWidth - (window.innerWidth / 2 - closestItem.offsetWidth / 2);
 
       const progress = targetX / horizontalScrollLength;
-      const targetScrollY = progress * trigger.scrollTrigger!.end;
+      const targetScrollY = progress * mainTimeline.scrollTrigger!.end;
 
       UpdateElement(pagesList[index], setActivePage);
 
       return new Promise(resolve => {
         gsap.to(window, {
           scrollTo: { y: targetScrollY },
-          duration: firstUpdate ? 0 : .5,
+          duration: firstUpdate ? 0 : 0.5,
           onComplete: resolve
         });
-      })
+      });
     }
   }
 }

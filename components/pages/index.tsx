@@ -10,7 +10,7 @@ import Rocket from '@/assets/svgs/rocket.svg';
 import Person from '@/assets/svgs/person.svg';
 
 import { page } from "@/types";
-import { updateNavbarTitles } from "../navbar/navbar";
+import { embbedList } from "../navbar/navbar";
 
 const pagesList: page[] = [
   {
@@ -76,6 +76,23 @@ function ShowElement(tl: gsap.core.Timeline, item: Element, setActivePage: Dispa
       }
     }
   });
+};
+
+let firstRender: boolean = !0;
+function updateNavbarTitles(progress: number) {
+    const scrollList = gsap.utils.toArray<Element>(`.${styles.headerList} > li`);
+
+    scrollList.forEach((scroll, i) => {
+        gsap.to(scroll, {
+            scrollTo: {
+                x: (scroll.scrollWidth - scroll.clientWidth) * (progress * (pagesList.length - 1) / (embbedList.length - 1) + i / (embbedList.length - 1))
+            },
+            duration: .5,
+            delay: .3
+        });
+    });
+
+    if (firstRender) firstRender = !1;
 };
 
 function UpdateElement(itemPage: page, setActivePage: Dispatch<SetStateAction<page>>) {

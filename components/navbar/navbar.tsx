@@ -37,23 +37,6 @@ function Navbar() {
     </nav>
 }
 
-let firstRender: boolean = !0;
-function updateNavbarTitles(progress: number) {
-    const scrollList = gsap.utils.toArray<Element>(`.${styles.headerList} > li`);
-
-    scrollList.forEach((scroll, i) => {
-        gsap.to(scroll, {
-            scrollTo: {
-                x: (scroll.scrollWidth - scroll.clientWidth) * (progress * (pagesList.length - 1) / (embbedList.length - 1) + i / (embbedList.length - 1))
-            },
-            duration: .5,
-            delay: .3
-        });
-    });
-
-    if (firstRender) firstRender = !1;
-};
-
-export { updateNavbarTitles };
+export { embbedList };
 
 export default Navbar;

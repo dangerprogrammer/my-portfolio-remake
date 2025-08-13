@@ -81,56 +81,60 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
     ease: "none"
   }, 0);
 
-  // ===== FIXO ENTRE DOIS PONTOS =====
-  const itemWidth = fixedItem.clientWidth;
-  const startScroll = (itemWidth * fixedIndex) / horizontalScrollLength * mainTimeline.scrollTrigger!.end;
-  const endScroll = startScroll + 500; // 500px de scroll vertical (ajuste aqui)
+  setTimeout(() => {
+    // ===== FIXO ENTRE DOIS PONTOS =====
+    const itemWidth = fixedItem.clientWidth;
+    const startScroll = (itemWidth * (fixedIndex + 0)) / horizontalScrollLength * mainTimeline.scrollTrigger!.end;
+    const endScroll = startScroll + 500; // 500px de scroll vertical (ajuste aqui)
 
-  ScrollTrigger.create({
-    trigger: pinWrap,
-    start: startScroll,
-    end: endScroll,
-    onEnter: () => {
-      gsap.set(fixedItem, {
-        position: "fixed",
-        left: "50%",
-        top: "50%",
-        xPercent: -50,
-        yPercent: -50,
-        zIndex: 10
-      });
-    },
-    onLeave: () => {
-      gsap.set(fixedItem, {
-        position: "absolute",
-        left: `${fixedIndex * 100}%`,
-        top: "0%",
-        xPercent: 0,
-        yPercent: 0,
-        zIndex: ""
-      });
-    },
-    onEnterBack: () => {
-      gsap.set(fixedItem, {
-        position: "fixed",
-        left: "50%",
-        top: "50%",
-        xPercent: -50,
-        yPercent: -50,
-        zIndex: 10
-      });
-    },
-    onLeaveBack: () => {
-      gsap.set(fixedItem, {
-        position: "absolute",
-        left: `${fixedIndex * 100}%`,
-        top: "0%",
-        xPercent: 0,
-        yPercent: 0,
-        zIndex: ""
-      });
-    }
-  });
+    console.log('startScroll', startScroll);
+    console.log('endScroll', endScroll);
+    ScrollTrigger.create({
+      trigger: pinWrap,
+      start: startScroll,
+      end: endScroll,
+      onEnter: () => {
+        gsap.set(fixedItem, {
+          position: "fixed",
+          left: "50%",
+          top: "50%",
+          xPercent: -50,
+          yPercent: -50,
+          zIndex: 10
+        });
+      },
+      onLeave: () => {
+        gsap.set(fixedItem, {
+          position: "absolute",
+          left: `${fixedIndex * 100}%`,
+          top: "0%",
+          xPercent: 0,
+          yPercent: 0,
+          zIndex: ""
+        });
+      },
+      onEnterBack: () => {
+        gsap.set(fixedItem, {
+          position: "fixed",
+          left: "50%",
+          top: "50%",
+          xPercent: -50,
+          yPercent: -50,
+          zIndex: 10
+        });
+      },
+      onLeaveBack: () => {
+        gsap.set(fixedItem, {
+          position: "absolute",
+          left: `${fixedIndex * 100}%`,
+          top: "0%",
+          xPercent: 0,
+          yPercent: 0,
+          zIndex: ""
+        });
+      }
+    });
+  }, 0);
 
   gsap.to(pinWrap, { backgroundColor: 'inherit', duration: 0 });
   gsap.to(pinWrap, { backgroundColor: '#080c1a', delay: 1, duration: 1 });

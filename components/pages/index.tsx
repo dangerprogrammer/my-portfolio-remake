@@ -18,6 +18,9 @@ const pagesList: page[] = [
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 1");
       })
+    }, headerProps: {
+      title: "",
+      desc: ""
     }
   },
   {
@@ -25,6 +28,9 @@ const pagesList: page[] = [
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 2");
       })
+    }, headerProps: {
+      title: "",
+      desc: ""
     }
   },
   {
@@ -32,6 +38,9 @@ const pagesList: page[] = [
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 3");
       })
+    }, headerProps: {
+      title: "",
+      desc: ""
     }
   }
 ];

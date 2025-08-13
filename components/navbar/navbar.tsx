@@ -19,7 +19,7 @@ function Navbar() {
             <Loader transitionDelay='.03s' backgroundColor='white' zIndex='0' />
         </span>
         <a className={styles.titleNav} style={{ cursor: 'pointer' }} href="/"><h1>Portfolio</h1></a>
-        <span className={styles.pagesHeader}>
+        <span className={styles.headerPages}>
             <span className={styles.lineBar}></span>
             <ul className={styles.headerList}>
                 <li>{embbedList.map((title, i) => <span key={i}>{title.toUpperCase()}</span>)}</li>

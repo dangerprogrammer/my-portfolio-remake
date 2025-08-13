@@ -1,7 +1,7 @@
 'use client';
 
 import Navbar from "@/components/navbar/navbar";
-import Pages from "@/components/pages/pages";
+import Pages, { PagesHeader } from "@/components/pages/pages";
 import pagesList from "@/components/pages";
 import { renderPage } from "@/scripts/start";
 import { useContext, useEffect } from "react";
@@ -16,7 +16,7 @@ function Home() {
   return <>
     <Navbar />
     <Pages>
-      {pagesList.filter(({ Element }) => Element).map(({ Element }, ind) => (Element = Element!, <Element {...contexts} key={ind} />))}
+      {pagesList.map(({ Element, headerProps }, ind) => Element ? <Element {...contexts} key={ind} /> : <PagesHeader {...contexts} {...headerProps} key={ind} />)}
     </Pages>
   </>
 }

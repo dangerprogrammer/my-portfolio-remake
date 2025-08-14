@@ -1,0 +1,25 @@
+.shadowContent {
+    background-color: blue;
+
+    .sidebarContent {
+        display: flex;
+        flex-direction: column;
+
+        .sideTitle {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+
+            .title {
+                display: flex;
+                width: 10em;
+                overflow-x: auto;
+
+                > * {
+                    flex-shrink: 0;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

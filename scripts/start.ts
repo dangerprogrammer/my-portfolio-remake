@@ -51,7 +51,7 @@ function renderScrolling(contexts: Context) {
 
   const fixedItem = document.querySelector(`.${pageStyles.shadowPage}`)!;
 
-  let oldProgress = 0, pct = 0;
+  let pct = 0;
   const mainTimeline = gsap.timeline({
     scrollTrigger: {
       scrub: 1,
@@ -71,16 +71,13 @@ function renderScrolling(contexts: Context) {
         clearTimeout(snapTimeout);
         snapTimeout = setTimeout(() => {
           contexts.setSnapping(true);
-          snapToClosest()?.then(() => {
-            contexts.setSnapping(false);
 
-            onFinishSnap(+pct.toFixed(3));
-          });
+          snapToClosest()?.then(() => 
+            setTimeout(() => contexts.setSnapping(false), 500)
+          );
         }, firstUpdate ? 0 : 500);
 
         if (firstUpdate) firstUpdate = false;
-
-        oldProgress = ev.progress;
       }
     }
   });
@@ -136,10 +133,6 @@ function renderScrolling(contexts: Context) {
         });
       });
     }
-  }
-
-  function onFinishSnap(pct: number) {
-    console.log(pct ? "show!" : "hide!");
   }
 }
 

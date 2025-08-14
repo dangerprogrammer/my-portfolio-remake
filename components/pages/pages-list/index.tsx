@@ -1,4 +1,4 @@
-import { Context, page } from "@/types";
+import { page } from "@/types";
 import WelcomeHeader from "../welcome/welcome";
 import AboutMePage from "../about-me/about-me";
 import SkillsPage from "../skills/skills";
@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction } from "react";
 
 const pagesList: page[] = [
   {
-    Element: ({ globalContexts }: { globalContexts: Context }) => WelcomeHeader(), url: "/welcome", title: "Welcome", Icon: Rocket, timeline: function (tl, item, setActivePage) {
+    Element: WelcomeHeader, url: "/welcome", title: "Welcome", Icon: Rocket, timeline: function (tl, item, setActivePage) {
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 1");
       })
@@ -84,8 +84,8 @@ function fullyVisible(el: Element) {
 pagesList.filter(({ Element }) => Element).forEach(({ Element }, i) => {
   Element = Element!;
   
-  pagesList[i].Element = () => <section className={styles.page}>
-    <Element />
+  pagesList[i].Element = ({ globalContexts }) => <section className={styles.page}>
+    <Element globalContexts={globalContexts} />
   </section>
 });
 

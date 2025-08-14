@@ -1,7 +1,8 @@
 import { Dispatch, JSX, SetStateAction } from "react";
+import { Context } from ".";
 
 export type page = {
-    Element?: () => JSX.Element;
+    Element?: ({ globalContexts }: { globalContexts: Context }) => JSX.Element;
     url: string;
     Page?: () => JSX.Element;
     title: string;

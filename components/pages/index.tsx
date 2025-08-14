@@ -4,7 +4,7 @@ import navbarStyles from '../navbar/navbar.module.scss';
 
 import { page } from "@/types";
 import { embbedList } from "../navbar/navbar";
-import pagesList from "./pagesList";
+import pagesList from "./pages-list";
 import gsap from "gsap";
 
 let firstRender: boolean = !0;

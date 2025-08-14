@@ -6,9 +6,8 @@ import pageStyles from '@/components/pages/index.module.scss';
 import { gsap } from "gsap";
 import { ScrollTrigger } from 'gsap/all';
 import { UpdateElement } from '@/components/pages';
-import { Dispatch, SetStateAction } from 'react';
-import { page } from '@/types';
-import pagesList from '@/components/pages/pagesList';
+import { Context } from '@/types';
+import pagesList from '@/components/pages/pages-list';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,7 +39,7 @@ function renderNav() {
   });
 }
 
-function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
+function renderScrolling(contexts: Context) {
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
   const items = gsap.utils.toArray<Element>(`.${pageStyles.page}:not(.${pageStyles.shadowPage})`);
 
@@ -49,7 +48,6 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   let snapTimeout: NodeJS.Timeout;
 
   let firstUpdate = true;
-  let isSnapping = false;
 
   const fixedItem = document.querySelector(`.${pageStyles.shadowPage}`)!;
 
@@ -65,17 +63,16 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
 
         gsap.to(fixedItem, {
           x: fixedItem.clientWidth - fixedItem.clientWidth * pct,
-          delay: .05,
-          duration: Math.abs(ev.progress - oldProgress) ** 10 * 5
+          duration: 0
         });
 
-        if (isSnapping) return;
+        if (contexts.snapping) return;
 
         clearTimeout(snapTimeout);
         snapTimeout = setTimeout(() => {
-          isSnapping = true;
+          contexts.setSnapping(true);
           snapToClosest()?.then(() => {
-            isSnapping = false;
+            contexts.setSnapping(false);
 
             onFinishSnap(+pct.toFixed(3));
           });
@@ -104,7 +101,7 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   });
 
   items.forEach((item, i) =>
-    pagesList[i].timeline(itemTimeline, item, setActivePage)
+    pagesList[i].timeline(itemTimeline, item, contexts.setActivePage)
   );
 
   function snapToClosest() {
@@ -129,7 +126,7 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
       const progress = targetX / horizontalScrollLength;
       const targetScrollY = progress * mainTimeline.scrollTrigger!.end;
 
-      UpdateElement(pagesList[index], setActivePage);
+      UpdateElement(pagesList[index], contexts.setActivePage);
 
       return new Promise(resolve => {
         gsap.to(window, {
@@ -146,10 +143,10 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   }
 }
 
-function renderPage(setActivePage: Dispatch<SetStateAction<page>>) {
+function renderPage(contexts: Context) {
   renderNav();
 
-  renderScrolling(setActivePage);
+  renderScrolling(contexts);
 }
 
 export { renderPage };

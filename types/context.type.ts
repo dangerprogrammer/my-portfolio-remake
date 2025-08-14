@@ -6,4 +6,6 @@ export type Context = {
     setHistory: Dispatch<SetStateAction<string[]>>;
     activePage: page;
     setActivePage: Dispatch<SetStateAction<page>>;
+    snapping: boolean;
+    setSnapping: Dispatch<SetStateAction<boolean>>;
 };

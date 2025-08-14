@@ -1,9 +1,9 @@
-import { page } from "@/types";
-import WelcomeHeader from "./welcome/welcome";
-import AboutMePage from "./about-me/about-me";
-import SkillsPage from "./skills/skills";
+import { Context, page } from "@/types";
+import WelcomeHeader from "../welcome/welcome";
+import AboutMePage from "../about-me/about-me";
+import SkillsPage from "../skills/skills";
 
-import styles from './index.module.scss';
+import styles from '../index.module.scss';
 
 import Rocket from '@/assets/svgs/rocket.svg';
 import Person from '@/assets/svgs/person.svg';
@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction } from "react";
 
 const pagesList: page[] = [
   {
-    Element: WelcomeHeader, url: "/welcome", title: "Welcome", Icon: Rocket, timeline: function (tl, item, setActivePage) {
+    Element: ({ globalContexts }: { globalContexts: Context }) => WelcomeHeader(), url: "/welcome", title: "Welcome", Icon: Rocket, timeline: function (tl, item, setActivePage) {
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 1");
       })

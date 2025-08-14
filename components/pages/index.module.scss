@@ -3,4 +3,13 @@
     height: 100%;
     width: 100%;
     flex-shrink: 0;
+
+    &.shadowPage {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f005;
+        will-change: transform;
+    }
 }

@@ -28,8 +28,8 @@ svg {
     pointer-events: none;
 }
 
-// ::-webkit-scrollbar {
-//     width: 0;
-//     height: 0;
-//     display: none;
-// }
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}

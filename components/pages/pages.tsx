@@ -12,8 +12,10 @@ function Pages({ children }: Readonly<{ children: React.ReactNode }>) {
     </main>
 }
 
-function PagesHeader({ ...headerProps }: headerProps) {
-    return <section className={indexStyles.page}>{headerProps.title}</section>
+function PagesHeader({ headerProps, shadow }: { headerProps?: headerProps, shadow?: boolean }) {
+    return <section className={indexStyles.page + (shadow ? ` ${indexStyles.shadowPage}` : '')}>
+        {headerProps ? <>{headerProps.title}</> : <>Shadow</>}
+    </section>
 }
 
 export { PagesHeader };

@@ -16,7 +16,9 @@ function Home() {
   return <>
     <Navbar />
     <Pages>
-      {pagesList.map(({ Element, headerProps }, ind) => Element ? <Element {...contexts} key={ind} /> : <PagesHeader {...contexts} {...headerProps} key={ind} />)}
+      {pagesList.filter(({ Element }) => Element).map(({ Element }, ind) => (Element = Element!, <Element {...contexts} key={ind} />))}
+      <PagesHeader shadow={!0} />
+      {pagesList.filter(({ Element }) => !Element).map(({ headerProps }, ind) => <PagesHeader {...contexts} headerProps={headerProps} key={ind} />)}
     </Pages>
   </>
 }

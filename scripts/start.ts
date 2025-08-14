@@ -42,7 +42,7 @@ function renderNav() {
 
 function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
-  const items = gsap.utils.toArray<Element>(`.${pageStyles.page}`);
+  const items = gsap.utils.toArray<Element>(`.${pageStyles.page}:not(.${pageStyles.shadowPage})`);
 
   let pinWrapWidth = pinWrap.scrollWidth;
   let horizontalScrollLength = pinWrapWidth - window.innerWidth;
@@ -51,90 +51,47 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
   let firstUpdate = true;
   let isSnapping = false;
 
-  const fixedIndex = 1;
-  const fixedItem = items[fixedIndex];
-  const movingItems = items.filter((_, i) => i !== fixedIndex);
+  const fixedItem = document.querySelector(`.${pageStyles.shadowPage}`)!;
 
+  let oldProgress = 0, pct = 0;
   const mainTimeline = gsap.timeline({
     scrollTrigger: {
       scrub: 1,
       trigger: pinWrap,
       pin: true,
       end: () => `+=${pinWrap.clientWidth}`,
-      onUpdate: () => {
+      onUpdate: ev => {
+        pct = Math.min(ev.progress * (items.length - 1), 1);
+
+        gsap.to(fixedItem, {
+          x: fixedItem.clientWidth - fixedItem.clientWidth * pct,
+          delay: .05,
+          duration: Math.abs(ev.progress - oldProgress) ** 10 * 5
+        });
+
         if (isSnapping) return;
+
         clearTimeout(snapTimeout);
         snapTimeout = setTimeout(() => {
-          // isSnapping = true;
-          // snapToClosest()?.then(() => {
-          //   isSnapping = false;
-          // });
+          isSnapping = true;
+          snapToClosest()?.then(() => {
+            isSnapping = false;
+
+            onFinishSnap(+pct.toFixed(3));
+          });
         }, firstUpdate ? 0 : 500);
+
         if (firstUpdate) firstUpdate = false;
+
+        oldProgress = ev.progress;
       }
     }
   });
 
-  // Anima apenas os outros itens
-  mainTimeline.to(movingItems, {
+  mainTimeline.to(items, {
     xPercent: -100 * (items.length - 1),
     ease: "none"
-  }, 0);
-
-  setTimeout(() => {
-    // ===== FIXO ENTRE DOIS PONTOS =====
-    const itemWidth = fixedItem.clientWidth;
-    const startScroll = (itemWidth * (fixedIndex + 0)) / horizontalScrollLength * mainTimeline.scrollTrigger!.end;
-    const endScroll = startScroll + 500; // 500px de scroll vertical (ajuste aqui)
-
-    console.log('startScroll', startScroll);
-    console.log('endScroll', endScroll);
-    ScrollTrigger.create({
-      trigger: pinWrap,
-      start: startScroll,
-      end: endScroll,
-      onEnter: () => {
-        gsap.set(fixedItem, {
-          position: "fixed",
-          left: "50%",
-          top: "50%",
-          xPercent: -50,
-          yPercent: -50,
-          zIndex: 10
-        });
-      },
-      onLeave: () => {
-        gsap.set(fixedItem, {
-          position: "absolute",
-          left: `${fixedIndex * 100}%`,
-          top: "0%",
-          xPercent: 0,
-          yPercent: 0,
-          zIndex: ""
-        });
-      },
-      onEnterBack: () => {
-        gsap.set(fixedItem, {
-          position: "fixed",
-          left: "50%",
-          top: "50%",
-          xPercent: -50,
-          yPercent: -50,
-          zIndex: 10
-        });
-      },
-      onLeaveBack: () => {
-        gsap.set(fixedItem, {
-          position: "absolute",
-          left: `${fixedIndex * 100}%`,
-          top: "0%",
-          xPercent: 0,
-          yPercent: 0,
-          zIndex: ""
-        });
-      }
-    });
-  }, 0);
+  });
 
   gsap.to(pinWrap, { backgroundColor: 'inherit', duration: 0 });
   gsap.to(pinWrap, { backgroundColor: '#080c1a', delay: 1, duration: 1 });
@@ -182,6 +139,10 @@ function renderScrolling(setActivePage: Dispatch<SetStateAction<page>>) {
         });
       });
     }
+  }
+
+  function onFinishSnap(pct: number) {
+    console.log(pct ? "show!" : "hide!");
   }
 }
 

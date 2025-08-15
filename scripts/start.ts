@@ -6,23 +6,26 @@ import pageStyles from '@/components/pages/index.module.scss';
 import { gsap } from "gsap";
 import { ScrollTrigger } from 'gsap/all';
 import { UpdateElement } from '@/components/pages';
-import { Context } from '@/types';
+import { Context, Registry } from '@/types';
 import pagesList from '@/components/pages/pages-list';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// const { refContext } = createRefContext<{
-//   loaders:
-// }>();
+function renderNav({ all }: Registry<any>) {
+  const refs: any = all(), cloneRefs: { [key: string]: any } = {};
+  const navbarTitle = document.querySelector(`[class*="${navbarStyles.titleNav}"]`)!;
 
-function renderNav() {
-  const preloaders = document.querySelectorAll(`[class*="${loaderStyles.loader}"]`),
-    mediaContainers = document.querySelectorAll(`[class*="${navbarStyles.mediaContainer}"]`),
-    navbarTitle = document.querySelector(`[class*="${navbarStyles.titleNav}"]`)!;
+  Object.keys(refs).map(ref => (
+    cloneRefs[ref] = Array.isArray(refs[ref]) ? [] : refs[ref].current,
+    Array.isArray(refs[ref]) && refs[ref].map((r, i) => cloneRefs[ref][i] = r.current)
+  ));
+  const { loaders, medias, navTitle } = cloneRefs;
 
-  navbarTitle.classList.toggle(navbarStyles.noClick, location.pathname == '/');
-  preloaders.forEach(preloader => preloader.classList.remove(loaderStyles.notRendered));
-  mediaContainers.forEach(mediaContainer => mediaContainer.classList.add(navbarStyles.showItem));
+  console.log(navTitle);
+
+  navTitle.classList.toggle(navbarStyles.noClick, location.pathname == '/');
+  loaders.map((l: any) => l.classList.remove(loaderStyles.notRendered));
+  medias.forEach((mediaContainer: any) => mediaContainer.classList.add(navbarStyles.showItem));
 
   const headerLine = document.querySelector(`.${navbarStyles.lineBar}`)!;
   gsap.to(headerLine, {
@@ -76,7 +79,7 @@ function renderScrolling(contexts: Context) {
         snapTimeout = setTimeout(() => {
           contexts.setSnapping(true);
 
-          snapToClosest()?.then(() => 
+          snapToClosest()?.then(() =>
             setTimeout(() => contexts.setSnapping(false), 500)
           );
         }, firstUpdate ? 0 : 500);
@@ -140,8 +143,8 @@ function renderScrolling(contexts: Context) {
   }
 }
 
-function renderPage(contexts: Context) {
-  renderNav();
+function renderPage(contexts: Context, refs: Registry<any>) {
+  renderNav(refs);
 
   renderScrolling(contexts);
 }

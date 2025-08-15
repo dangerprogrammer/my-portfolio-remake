@@ -7,11 +7,13 @@ import { renderPage } from "@/scripts/start";
 import { useEffect } from "react";
 import { GlobalContext } from "@/components/context/context";
 import PagesHeader from "@/components/pages/pages-header";
+import { useRefs } from "@/components/context/ref-context";
 
 function Home() {
   const contexts = GlobalContext();
+  const refs = useRefs();
 
-  useEffect(() => renderPage(contexts), []);
+  useEffect(() => renderPage(contexts, refs), []);
 
   return <>
     <Navbar />

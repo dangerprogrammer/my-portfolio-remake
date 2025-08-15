@@ -15,7 +15,7 @@ function PagesHeader({ headerProps, shadow, globalContexts }: { headerProps?: he
         const { activePage, snapping } = globalContexts!;
         if (prevActive == activePage || snapping == !0) return;
 
-        console.log("activePage", activePage);
+        // console.log("activePage", activePage);
         setTitle(pagesList.indexOf(activePage));
 
         

@@ -1,40 +1,40 @@
 'use client';
 
-import { Registry } from "@/types";
-import { createContext, createRef, ReactNode, useContext, useRef } from "react";
+import { Registry, RegistryAll, Store } from '@/types';
+import { createContext, createRef, ReactNode, useContext, useRef } from 'react';
 
-function createRefContext<T extends Record<string, any>>() {
-    const Context = createContext<Registry<T> | null>(null);
+const Context = createContext<Registry<any> | undefined>(undefined);
 
-    function Provider({ children }: { children: ReactNode }) {
-        const store = useRef<Partial<{ [K in keyof T]: React.RefObject<T[K]> }>>({});
+function RefProvider<T extends Record<string, any>>({ children }: { children: ReactNode; }) {
+    const store = useRef<Store<T>>({});
 
-        const api: Registry<T> = {
-            getRef: key => {
-                let r = store.current[key];
+    const values: Registry<T> = {
+        getRef: <K extends keyof T>(key: K, index?: number): React.RefObject<T[K]> => {
+            if (store.current[key] === undefined)
+                store.current[key] = (index !== undefined ? ([] as React.RefObject<T[K]>[]) : createRef<T[K]>()) as Store<T>[K];
 
-                if (!r) {
-                    r = createRef<T[typeof key]>() as React.RefObject<T[typeof key]>;
-                    store.current[key] = r;
-                }
+            if (Array.isArray(store.current[key])) {
+                const arr = store.current[key] as React.RefObject<T[K]>[];
+                const idx = index ?? arr.length;
 
-                return r;
-            },
-            logRef: () => {
-                console.log(store.current);
-            },
-        };
+                if (!arr[idx])
+                    arr[idx] = createRef<T[K]>() as React.RefObject<T[K]>;
 
-        return <Context.Provider value={api}>{children}</Context.Provider>;
-    }
+                return arr[idx];
+            }
 
-    function refContext(): Registry<T> {
-        const contexts = useContext(Context)!;
+            return store.current[key] as React.RefObject<T[K]>;
+        },
+        all: ((key?: keyof T) => key ? store.current[key] : store.current) as RegistryAll<T>
+    };
 
-        return contexts;
-    }
-
-    return { Provider, refContext };
+    return <Context.Provider value={values}>{children}</Context.Provider>;
 }
 
-export const { Provider: RefProvider, refContext } = createRefContext();
+function useRefs<T extends Record<string, any>>(): Registry<T> {
+    const context = useContext(Context)!;
+
+    return context;
+}
+
+export { RefProvider, useRefs };

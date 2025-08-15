@@ -11,6 +11,10 @@ import pagesList from '@/components/pages/pages-list';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// const { refContext } = createRefContext<{
+//   loaders:
+// }>();
+
 function renderNav() {
   const preloaders = document.querySelectorAll(`[class*="${loaderStyles.loader}"]`),
     mediaContainers = document.querySelectorAll(`[class*="${navbarStyles.mediaContainer}"]`),

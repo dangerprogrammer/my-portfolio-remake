@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/global.scss";
-import ContextProvider from "@/components/context/context";
+import { GlobalProvider } from "@/components/context/context";
+import { RefProvider } from "@/components/context/ref-context";
 
 const metadata: Metadata = {
   title: {
@@ -15,9 +16,11 @@ export { metadata };
 function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return <html lang="pt-BR">
     <body>
-      <ContextProvider>
-        {children}
-      </ContextProvider>
+      <GlobalProvider>
+        <RefProvider>
+          {children}
+        </RefProvider>
+      </GlobalProvider>
     </body>
   </html>
 }

@@ -4,13 +4,12 @@ import Navbar from "@/components/navbar/navbar";
 import Pages from "@/components/pages/pages";
 import pagesList from "@/components/pages/pages-list";
 import { renderPage } from "@/scripts/start";
-import { useContext, useEffect } from "react";
-import { ContextApp } from "@/components/context/context";
-import { Context } from "@/types";
+import { useEffect } from "react";
+import { GlobalContext } from "@/components/context/context";
 import PagesHeader from "@/components/pages/pages-header";
 
 function Home() {
-  const { ...contexts } = useContext<Context>(ContextApp);
+  const contexts = GlobalContext();
 
   useEffect(() => renderPage(contexts), []);
 

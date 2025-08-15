@@ -1,13 +1,13 @@
 'use client';
 
 import { usePathname } from "next/navigation";
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import pagesList from "../pages/pages-list";
 import { Context } from "@/types";
 
 const ContextApp = createContext<Context>({} as Context);
 
-function ContextProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+function GlobalProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname(),
         [history, setHistory] = useState([pathname]),
         [activePage, setActivePage] = useState(pagesList[0]),
@@ -17,11 +17,15 @@ function ContextProvider({ children }: Readonly<{ children: React.ReactNode }>) 
         history, setHistory,
         activePage, setActivePage,
         snapping, setSnapping
-        }}>
+    }}>
         {children}
     </ContextApp.Provider>
 }
 
-export { ContextApp };
+function GlobalContext() {
+    const contexts = useContext(ContextApp);
 
-export default ContextProvider;
+    return { ...contexts };
+}
+
+export { GlobalProvider, GlobalContext };

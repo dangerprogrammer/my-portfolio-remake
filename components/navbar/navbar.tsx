@@ -11,6 +11,7 @@ import { ScrollToPlugin } from 'gsap/all';
 gsap.registerPlugin(ScrollToPlugin);
 
 const embbedList = ["", ...pagesList.map(({ title }) => title), ""];
+
 function Navbar() {
     return <nav className={styles.navbarStyles}>
         <span className={styles.preloaderContainer}>

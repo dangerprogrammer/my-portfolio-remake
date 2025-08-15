@@ -1,11 +1,15 @@
-import { Dispatch, SetStateAction } from "react";
 import { page } from ".";
 
 export type Context = {
     history: string[];
-    setHistory: Dispatch<SetStateAction<string[]>>;
+    setHistory: React.Dispatch<React.SetStateAction<string[]>>;
     activePage: page;
-    setActivePage: Dispatch<SetStateAction<page>>;
+    setActivePage: React.Dispatch<React.SetStateAction<page>>;
     snapping: boolean;
-    setSnapping: Dispatch<SetStateAction<boolean>>;
+    setSnapping: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type Registry<T extends Record<string, any>> = {
+  getRef: <K extends keyof T>(key: K) => React.RefObject<T[K]>;
+  logRef: () => void;
 };

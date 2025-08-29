@@ -9,6 +9,7 @@ import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/all';
 import { useRefs } from '../context/ref-context';
 import { JSX } from 'react';
+import Line from '../line/line';
 
 gsap.registerPlugin(ScrollToPlugin);
 
@@ -18,7 +19,9 @@ function Navbar() {
     const { getRef } = useRefs<{
         "loaders": JSX.Element,
         "medias": HTMLLIElement,
-        "navTitle": HTMLAnchorElement
+        "navTitle": HTMLAnchorElement,
+        "headerLinebar": HTMLSpanElement,
+        "headerPages": HTMLLIElement
     }>();
 
     return <nav className={styles.navbarStyles}>
@@ -29,11 +32,11 @@ function Navbar() {
         </span>
         <a ref={getRef("navTitle")} className={styles.titleNav} style={{ cursor: 'pointer' }} href="/"><h1>Portfolio</h1></a>
         <span className={styles.headerPages}>
-            <span className={styles.lineBar}></span>
+            <Line orientation='vertical' ref={getRef("headerLinebar")} origin='top' fixedStyles={{ margin: 'auto' }}/>
             <ul className={styles.headerList}>
-                <li>{embbedList.map((title, i) => <span key={i}>{title.toUpperCase()}</span>)}</li>
-                <li className={styles.mainPageHeader}>{embbedList.map((title, i) => <span key={i}>{title.toUpperCase()}</span>)}</li>
-                <li>{embbedList.map((title, i) => <span key={i}>{title.toUpperCase()}</span>)}</li>
+                <li ref={getRef("headerPages", 0)}>{embbedList.map((title, i) => <span key={i}>{title.toUpperCase()}</span>)}</li>
+                <li ref={getRef("headerPages", 1)} className={styles.mainPageHeader}>{embbedList.map((title, i) => <span key={i}>{title.toUpperCase()}</span>)}</li>
+                <li ref={getRef("headerPages", 2)}>{embbedList.map((title, i) => <span key={i}>{title.toUpperCase()}</span>)}</li>
             </ul>
         </span>
         <ul className={styles.socialMedia}>

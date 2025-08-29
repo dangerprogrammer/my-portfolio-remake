@@ -4,4 +4,20 @@
     height: .15em;
     width: 2em;
     background-color: currentColor;
+
+    &.horizontal {
+        height: .15em;
+        width: 2em;
+    }
+
+    &.vertical {
+        width: .15em;
+        height: 2em;
+    }
+
+    @each $pos in top, bottom, left, right {
+        &.origin-#{$pos} {
+            transform-origin: $pos;
+        }
+    }
 }

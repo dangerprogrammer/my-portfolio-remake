@@ -8,35 +8,32 @@ import { ScrollTrigger } from 'gsap/all';
 import { UpdateElement } from '@/components/pages';
 import { Context, Registry } from '@/types';
 import pagesList from '@/components/pages/pages-list';
+import { fixCloneRef } from '@/components/context/ref-context';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function renderNav({ all }: Registry<any>) {
-  const refs: any = all(), cloneRefs: { [key: string]: any } = {};
-  const navbarTitle = document.querySelector(`[class*="${navbarStyles.titleNav}"]`)!;
-
-  Object.keys(refs).map(ref => (
-    cloneRefs[ref] = Array.isArray(refs[ref]) ? [] : refs[ref].current,
-    Array.isArray(refs[ref]) && refs[ref].map((r, i) => cloneRefs[ref][i] = r.current)
-  ));
-  const { loaders, medias, navTitle } = cloneRefs;
-
-  console.log(navTitle);
+function renderNav(refs: Registry<any>) {
+  const {
+    loaders,
+    medias,
+    navTitle,
+    headerLinebar,
+    headerPages
+  } = fixCloneRef(refs);
 
   navTitle.classList.toggle(navbarStyles.noClick, location.pathname == '/');
-  loaders.map((l: any) => l.classList.remove(loaderStyles.notRendered));
-  medias.forEach((mediaContainer: any) => mediaContainer.classList.add(navbarStyles.showItem));
+  loaders.map((l: HTMLElement) => l.classList.remove(loaderStyles.notRendered));
+  medias.forEach((mediaContainer: HTMLLIElement) => mediaContainer.classList.add(navbarStyles.showItem));
 
-  const headerLine = document.querySelector(`.${navbarStyles.lineBar}`)!;
-  gsap.to(headerLine, {
+  gsap.fromTo(headerLinebar, {
+    scaleY: 0
+  }, {
     scaleY: 1,
     delay: 1.2,
     duration: .3
   });
 
-  const headerPages = gsap.utils.toArray<Element>(`.${navbarStyles.headerList} > li`);
-
-  headerPages.forEach((h, i) => {
+  headerPages.forEach((h: Element, i: number) => {
     const spans = h.querySelectorAll<Element>('span');
 
     gsap.to(spans, {
@@ -46,17 +43,18 @@ function renderNav({ all }: Registry<any>) {
   });
 }
 
-function renderScrolling(contexts: Context) {
-  const pinWrap = document.querySelector(`.${pagesStyles.pagesContent}`)!;
-  const items = gsap.utils.toArray<Element>(`.${pageStyles.page}:not(.${pageStyles.shadowPage})`);
+function renderScrolling(contexts: Context, refs: Registry<any>) {
+  const {
+    pinWrap,
+    items,
+    shadow
+  } = fixCloneRef(refs);
 
   let pinWrapWidth = pinWrap.scrollWidth;
   let horizontalScrollLength = pinWrapWidth - window.innerWidth;
   let snapTimeout: NodeJS.Timeout;
 
   let firstUpdate = true;
-
-  const fixedItem = document.querySelector(`.${pageStyles.shadowPage}`)!;
 
   let pct = 0;
   const mainTimeline = gsap.timeline({
@@ -68,8 +66,8 @@ function renderScrolling(contexts: Context) {
       onUpdate: ev => {
         pct = Math.min(ev.progress * (items.length - 1), 1);
 
-        gsap.to(fixedItem, {
-          x: fixedItem.clientWidth - fixedItem.clientWidth * pct,
+        gsap.to(shadow, {
+          x: shadow.clientWidth - shadow.clientWidth * pct,
           duration: 0
         });
 
@@ -104,7 +102,7 @@ function renderScrolling(contexts: Context) {
     }
   });
 
-  items.forEach((item, i) =>
+  (items as Array<any>).forEach((item, i) =>
     pagesList[i].timeline(itemTimeline, item, contexts.setActivePage)
   );
 
@@ -113,7 +111,7 @@ function renderScrolling(contexts: Context) {
     let closestItem: any = null;
     let closestDistance = Infinity;
 
-    items.forEach(item => {
+    (items as Array<any>).forEach(item => {
       const bounds = item.getBoundingClientRect();
       const itemCenter = bounds.left + bounds.width / 2;
       const dist = Math.abs(center - itemCenter);
@@ -146,7 +144,7 @@ function renderScrolling(contexts: Context) {
 function renderPage(contexts: Context, refs: Registry<any>) {
   renderNav(refs);
 
-  renderScrolling(contexts);
+  renderScrolling(contexts, refs);
 }
 
 export { renderPage };

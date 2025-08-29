@@ -12,15 +12,21 @@ import { useRefs } from "@/components/context/ref-context";
 function Home() {
   const contexts = GlobalContext();
   const refs = useRefs();
+  const { getRef } = useRefs<{
+    "items": HTMLElement,
+    "shadow": HTMLElement
+  }>();
 
   useEffect(() => renderPage(contexts, refs), []);
+  const pagesWithElem = pagesList.filter(({ Element }) => Element),
+    pagesWithoutElem = pagesList.filter(({ Element }) => !Element);
 
   return <>
     <Navbar />
     <Pages>
-      {pagesList.filter(({ Element }) => Element).map(({ Element }, ind) => (Element = Element!, <Element globalContexts={contexts} key={ind} />))}
-      <PagesHeader globalContexts={contexts} shadow={!0} />
-      {pagesList.filter(({ Element }) => !Element).map(({ headerProps }, ind) => <PagesHeader globalContexts={contexts} headerProps={headerProps} key={ind} />)}
+      {pagesWithElem.map(({ Element }, ind) => (Element = Element!, <Element ref={getRef("items", ind)} globalContexts={contexts} key={ind} />))}
+      <PagesHeader ref={getRef("shadow")} refs={refs} globalContexts={contexts} shadow={!0} />
+      {pagesWithoutElem.map(({ headerProps }, ind) => <PagesHeader ref={getRef("items", ind + pagesWithElem.length)} refs={refs} globalContexts={contexts} headerProps={headerProps} key={ind} />)}
     </Pages>
   </>
 }

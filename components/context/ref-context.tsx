@@ -37,4 +37,15 @@ function useRefs<T extends Record<string, any>>(): Registry<T> {
     return context;
 }
 
-export { RefProvider, useRefs };
+function fixCloneRef({ all }: Registry<any>): { [key: string]: any } {
+  const refs: any = all(), cloneRefs: { [key: string]: any } = {};
+
+    Object.keys(refs).map(ref => (
+    cloneRefs[ref] = Array.isArray(refs[ref]) ? [] : refs[ref].current,
+    Array.isArray(refs[ref]) && refs[ref].map((r, i) => cloneRefs[ref][i] = r.current)
+  ));
+
+  return cloneRefs;
+}
+
+export { RefProvider, useRefs, fixCloneRef };

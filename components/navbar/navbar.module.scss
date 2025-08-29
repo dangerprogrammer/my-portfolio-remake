@@ -49,21 +49,9 @@
         display: flex;
         flex-direction: column;
         gap: .5em;
-        // font-family: 'Quicksand';
-        // font-weight: 700;
         font-family: 'Chocolate Classical Sans';
         font-weight: 400;
         pointer-events: none;
-
-        .lineBar {
-            display: block;
-            height: 2.5em;
-            width: 2px;
-            margin-inline: auto;
-            background-color: currentColor;
-            scale: 1 0;
-            transform-origin: top;
-        }
 
         .headerList {
             display: grid;

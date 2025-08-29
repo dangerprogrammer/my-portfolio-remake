@@ -84,8 +84,8 @@ function fullyVisible(el: Element) {
 pagesList.filter(({ Element }) => Element).forEach(({ Element }, i) => {
   Element = Element!;
   
-  pagesList[i].Element = ({ globalContexts }) => <section className={styles.page}>
-    <Element globalContexts={globalContexts} />
+  pagesList[i].Element = ({ globalContexts, ref }) => <section ref={ref} className={styles.page}>
+    <Element ref={undefined} globalContexts={globalContexts} />
   </section>
 });
 

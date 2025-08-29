@@ -2,7 +2,7 @@ import { Dispatch, JSX, SetStateAction } from "react";
 import { Context } from ".";
 
 export type page = {
-    Element?: ({ globalContexts }: { globalContexts: Context }) => JSX.Element;
+    Element?: ({ globalContexts, ref }: { globalContexts: Context, ref?: React.RefObject<any> }) => JSX.Element;
     url: string;
     Page?: () => JSX.Element;
     title: string;

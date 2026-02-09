@@ -2,11 +2,13 @@ import { page } from "@/types";
 import WelcomeHeader from "../welcome/welcome";
 import AboutMePage from "../about-me/about-me";
 import SkillsPage from "../skills/skills";
+import ProjectsPage from "../projects/projects";
 
 import styles from '../index.module.scss';
 
 import Rocket from '@/assets/svgs/rocket.svg';
 import Person from '@/assets/svgs/person.svg';
+import Desktop from '@/assets/svgs/desktop-outline.svg';
 import { Dispatch, SetStateAction } from "react";
 
 const pagesList: page[] = [
@@ -17,7 +19,7 @@ const pagesList: page[] = [
       })
     }, headerProps: {
       title: "Welcome Title",
-      desc: ""
+      desc: "Welcome to my portfolio! Explore my work and get to know me better."
     }
   },
   {
@@ -27,7 +29,7 @@ const pagesList: page[] = [
       })
     }, headerProps: {
       title: "About Me Title",
-      desc: ""
+      desc: "Learn more about my journey, background, and what drives me as a developer."
     }
   },
   {
@@ -37,7 +39,17 @@ const pagesList: page[] = [
       })
     }, headerProps: {
       title: "Skills Title",
-      desc: ""
+      desc: "Discover the technologies and tools I work with to build amazing projects."
+    }
+  },
+  {
+    url: "/projects", Page: ProjectsPage, title: "Projects", Icon: Desktop, timeline: function (tl, item, setActivePage) {
+      ShowElement(tl, item, setActivePage, this, () => {
+        // console.log("item full visible 4");
+      })
+    }, headerProps: {
+      title: "Projects Title",
+      desc: "Check out my latest work and creative solutions I've built over time."
     }
   }
 ];

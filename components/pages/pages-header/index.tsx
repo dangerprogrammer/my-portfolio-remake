@@ -15,19 +15,28 @@ function PagesHeader({ headerProps, shadow, globalContexts, ref, refs }: { heade
     const { getRef } = useRefs<{
         "shadowTitles": HTMLSpanElement,
         "shadowTitle": HTMLHeadingElement,
-        "shadowTitleLine": HTMLSpanElement
+        "shadowTitleLine": HTMLSpanElement,
+        "shadowDesc": HTMLParagraphElement,
+        "shadowDescs": HTMLSpanElement,
+        "descWords": HTMLSpanElement
     }>();
 
     useEffect(() => {
         const {
             shadowTitles,
-            shadowTitle
+            shadowTitle,
+
+            descWords
         } = fixCloneRef(refs);
 
         setTimeout(() => {
             gsap.set(shadowTitle, {
                 scrollTo: { x: shadowTitles[1].offsetLeft },
                 opacity: 0
+            });
+
+            gsap.set(descWords, {
+                y: '100%'
             });
         }, 1);
     }, []);
@@ -46,7 +55,9 @@ function PagesHeader({ headerProps, shadow, globalContexts, ref, refs }: { heade
         const {
             shadowTitles,
             shadowTitle,
-            shadowTitleLine
+            shadowTitleLine,
+
+            descWords
         } = fixCloneRef(refs), showing = pageIndex != 0, showingChanges = showing != prevShowing;
 
         if (showing) {
@@ -66,6 +77,30 @@ function PagesHeader({ headerProps, shadow, globalContexts, ref, refs }: { heade
             gsap.to(shadowTitle, {
                 scrollTo: { x: shadowTitles[pageIndex].offsetLeft }
             });
+
+            pagesList.forEach((page, descIndex) => {
+                const words = page.headerProps.desc.split(' ');
+
+                words.forEach((_, wordIndex) => {
+                    const wordRef = descWords[descIndex * 1000 + wordIndex];
+
+                    if (wordRef) {
+                        if (descIndex === pageIndex) {
+                            gsap.to(wordRef, {
+                                y: 0,
+                                duration: 0.35,
+                                delay: wordIndex * 0.15,
+                                ease: 'power2.out'
+                            });
+                        } else {
+                            gsap.to(wordRef, {
+                                y: '100%',
+                                duration: 0.3
+                            });
+                        }
+                    }
+                });
+            });
         }
 
         prevShowing = showing;
@@ -82,8 +117,27 @@ function PagesHeader({ headerProps, shadow, globalContexts, ref, refs }: { heade
                         )}
                     </h1>
                 </span>
-                <p>lorem20</p>
+                <p className={styles.desc} ref={getRef("shadowDesc")}>
+                    {pagesList.map(({ headerProps }, ind) =>
+                        <span key={ind} ref={getRef("shadowDescs", ind)}>
+                            {headerProps.desc.split(' ').map((word, wordInd) => (
+                                <span key={wordInd} className={styles.wordWrapper}>
+                                    <span ref={getRef("descWords", ind * 1000 + wordInd)} className={styles.word}>{word}</span>
+                                    {wordInd < headerProps.desc.split(' ').length - 1 ? ' ' : ''}
+                                </span>
+                            ))}
+                        </span>
+                    )}
+                </p>
             </aside>
+            <div className={styles.contentBox}>
+                {pagesList.map(({ title }, index) => (
+                    <div key={index} className={styles.contentItem}>
+                        {/* Adicione aqui o conteúdo futuro de cada página */}
+                        <h3>{title}</h3>
+                    </div>
+                ))}
+            </div>
         </main>}
     </section>
 }

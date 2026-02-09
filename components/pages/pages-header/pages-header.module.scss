@@ -1,9 +1,16 @@
 .shadowContent {
-    background-color: blue;
+    display: flex;
+    gap: 2em;
+    max-width: 100%;
+    overflow: hidden;
 
     .sidebarContent {
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        flex: 0 0 auto;
+        min-width: 0;
+        max-width: 40%;
 
         .sideTitle {
             display: flex;
@@ -13,13 +20,59 @@
             .title {
                 position: relative;
                 display: flex;
-                width: 10em;
+                width: max-content;
+                max-width: 100%;
                 overflow-x: auto;
 
-                > * {
+                >* {
                     flex-shrink: 0;
                     width: 100%;
                 }
+            }
+        }
+
+        .desc {
+            position: relative;
+            display: grid;
+            width: max-content;
+            max-width: 100%;
+
+            >* {
+                grid-area: 1 / 1;
+                width: 100%;
+            }
+
+            .wordWrapper {
+                display: inline-block;
+                overflow: hidden;
+                vertical-align: bottom;
+                margin-right: 0.3em;
+                
+                .word {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .contentBox {
+        background-color: blue;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        padding: 1em;
+        border-radius: 8px;
+        overflow: auto;
+
+        .contentItem {
+            padding: 1em;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+
+            h3 {
+                margin: 0;
             }
         }
     }

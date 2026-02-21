@@ -26,5 +26,10 @@
                 pointer-events: auto !important;
             }
         }
+
+        &.shadowBehind {
+            z-index: 0;
+            opacity: 0.35;
+        }
     }
 }

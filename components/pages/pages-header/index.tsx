@@ -26,6 +26,8 @@ function PagesHeader({ headerProps, shadow, globalContexts, ref, refs }: {
 }) {
     const [pageIndex, setPageIndex] = useState(0);
     const [cardsPageIndex, setCardsPageIndex] = useState(0);
+    const expandedContent = globalContexts?.expandedContent || false;
+    const setExpandedContent = globalContexts?.setExpandedContent;
     
     const { getRef } = useRefs<{
         "shadowTitles": HTMLSpanElement,
@@ -58,16 +60,42 @@ function PagesHeader({ headerProps, shadow, globalContexts, ref, refs }: {
 
         const indexPage = pagesList.indexOf(activePage);
         setPageIndex(indexPage);
+        setExpandedContent?.(false);
 
         prevActive = activePage;
-    }, [globalContexts?.snapping]);
+    }, [globalContexts?.snapping, setExpandedContent]);
+
+    // Controlar scroll quando expandedContent abre/fecha
+    useEffect(() => {
+        if (expandedContent) {
+            // Bloquear scroll do body
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+        } else {
+            // Restaurar scroll do body
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        };
+    }, [expandedContent]);
+
+    const handleSeeMore = () => {
+        setExpandedContent?.(true);
+    };
 
     return (
-        <section ref={ref} className={indexStyles.page + (shadow ? ` ${indexStyles.shadowPage}` : '')}>
+        <section
+            ref={ref}
+            className={`${indexStyles.page}${shadow ? ` ${indexStyles.shadowPage}` : ''}${shadow && expandedContent ? ` ${indexStyles.shadowBehind}` : ''}`}
+        >
             {headerProps ? (
                 <>{headerProps.title}</>
             ) : (
-                <main className={styles.shadowContent}>
+                <main className={`${styles.shadowContent}${expandedContent ? ` ${styles.shadowHidden}` : ''}`}>
                     <div className={styles.mainContent}>
                         <aside className={styles.sidebarContent}>
                             <span className={styles.sideTitle}>
@@ -101,9 +129,10 @@ function PagesHeader({ headerProps, shadow, globalContexts, ref, refs }: {
                     </div>
                     
                     <SeeMoreButton 
-                        pageUrl={pagesList[pageIndex]?.url} 
+                        onSeeMore={handleSeeMore}
                         getRef={getRef as any} 
                     />
+
                 </main>
             )}
         </section>

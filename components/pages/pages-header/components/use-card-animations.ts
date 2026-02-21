@@ -1,12 +1,17 @@
-import { useEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { Registry } from '@/types';
 import { fixCloneRef } from '@/components/context/ref-context';
 import { getCardsDataByPage } from './card-data';
 
 export function useCardAnimations(refs: Registry<any>, cardsPageIndex: number) {
-    useEffect(() => {
-        if (cardsPageIndex === 0) return;
+    const prevCardsPageIndex = useRef(0);
+
+    useLayoutEffect(() => {
+        if (cardsPageIndex === 0) {
+            prevCardsPageIndex.current = 0;
+            return;
+        }
 
         const {
             cardItems,
@@ -127,19 +132,29 @@ export function useCardAnimations(refs: Registry<any>, cardsPageIndex: number) {
             }
         });
 
-        // Animar botão entrando
+        // Botão fixo entre trocas de tópico; anima apenas na entrada vindo do welcome
         if (seeMoreBtn) {
-            gsap.fromTo(seeMoreBtn,
-                { opacity: 0, yPercent: 200, scale: 0.9 },
-                {
+            if (prevCardsPageIndex.current === 0) {
+                gsap.fromTo(seeMoreBtn,
+                    { opacity: 0, yPercent: 200, scale: 0.9 },
+                    {
+                        opacity: 1,
+                        yPercent: 0,
+                        scale: 1,
+                        duration: 0.7,
+                        delay: 0.5,
+                        ease: 'back.out(1.5)'
+                    }
+                );
+            } else {
+                gsap.set(seeMoreBtn, {
                     opacity: 1,
                     yPercent: 0,
-                    scale: 1,
-                    duration: 0.7,
-                    delay: 0.5,
-                    ease: 'back.out(1.5)'
-                }
-            );
+                    scale: 1
+                });
+            }
         }
+
+        prevCardsPageIndex.current = cardsPageIndex;
     }, [cardsPageIndex]);
 }

@@ -1,15 +1,13 @@
-import { useRouter } from 'next/navigation';
 import styles from '../pages-header.module.scss';
 import { RefObject } from 'react';
+import { FiArrowDown } from 'react-icons/fi';
 
 interface SeeMoreButtonProps {
-    pageUrl?: string;
+    onSeeMore: () => void;
     getRef: <K extends string>(key: K) => RefObject<any> | React.RefCallback<any>;
 }
 
-function SeeMoreButton({ pageUrl, getRef }: SeeMoreButtonProps) {
-    const router = useRouter();
-
+function SeeMoreButton({ onSeeMore, getRef }: SeeMoreButtonProps) {
     return (
         <button 
             ref={getRef("seeMoreBtn")}
@@ -17,17 +15,12 @@ function SeeMoreButton({ pageUrl, getRef }: SeeMoreButtonProps) {
             style={{ cursor: 'pointer', pointerEvents: 'auto', zIndex: 9999, position: 'relative' }}
             onClick={(e) => {
                 e.stopPropagation();
-                if (pageUrl) {
-                    router.push(pageUrl);
-                }
+                onSeeMore();
             }}
         >
             <span className={styles.btnText}>See More</span>
             <span className={styles.btnIcon}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <polyline points="19 12 12 19 5 12"></polyline>
-                </svg>
+                <FiArrowDown aria-hidden="true" />
             </span>
         </button>
     );

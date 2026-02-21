@@ -7,6 +7,8 @@ export type Context = {
   setActivePage: React.Dispatch<React.SetStateAction<page>>;
   snapping: boolean;
   setSnapping: React.Dispatch<React.SetStateAction<boolean>>;
+  expandedContent: boolean;
+  setExpandedContent: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type StoreValue<T> = React.RefObject<T> | React.RefObject<T>[];

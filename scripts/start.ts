@@ -12,6 +12,68 @@ import { fixCloneRef } from '@/components/context/ref-context';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const bgStops = [
+  {
+    from: [7, 11, 25],
+    to: [17, 24, 47],
+    accent: [99, 102, 241]
+  },
+  {
+    from: [8, 23, 43],
+    to: [12, 54, 96],
+    accent: [79, 172, 254]
+  },
+  {
+    from: [10, 34, 34],
+    to: [14, 64, 52],
+    accent: [67, 233, 123]
+  },
+  {
+    from: [36, 14, 49],
+    to: [60, 18, 41],
+    accent: [245, 87, 108]
+  }
+] as const;
+
+function mixColor(a: number[], b: number[], progress: number) {
+  return a.map((value, index) => Math.round(value + (b[index] - value) * progress));
+}
+
+function getGradientPalette(progress: number) {
+  const totalTransitions = bgStops.length - 1;
+  const scaled = Math.max(0, Math.min(1, progress)) * totalTransitions;
+  const index = Math.min(totalTransitions - 1, Math.floor(scaled));
+  const localProgress = scaled - index;
+
+  const current = bgStops[index];
+  const next = bgStops[index + 1] ?? bgStops[index];
+
+  return {
+    from: mixColor([...current.from], [...next.from], localProgress),
+    to: mixColor([...current.to], [...next.to], localProgress),
+    accent: mixColor([...current.accent], [...next.accent], localProgress)
+  };
+}
+
+function updateBodyScrollBackground(progress: number, surface?: HTMLElement) {
+  const body = document.body;
+  if (!body) return;
+
+  const normalized = Math.max(0, Math.min(1, progress));
+  const palette = getGradientPalette(normalized);
+  const glowX = 18 + normalized * 64;
+  const glowY = 20 + Math.sin(normalized * Math.PI) * 20;
+
+  const background = `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(${palette.accent[0]}, ${palette.accent[1]}, ${palette.accent[2]}, 0.28) 0%, rgba(${palette.accent[0]}, ${palette.accent[1]}, ${palette.accent[2]}, 0) 48%), linear-gradient(135deg, rgb(${palette.from[0]}, ${palette.from[1]}, ${palette.from[2]}) 0%, rgb(${palette.to[0]}, ${palette.to[1]}, ${palette.to[2]}) 100%)`;
+
+  body.style.background = background;
+  document.documentElement.style.background = background;
+
+  if (surface) {
+    surface.style.background = background;
+  }
+}
+
 function renderNav(refs: Registry<any>) {
   const {
     loaders,
@@ -57,6 +119,8 @@ function renderScrolling(contexts: Context, refs: Registry<any>) {
   let firstUpdate = true;
 
   let pct = 0;
+  updateBodyScrollBackground(0, pinWrap);
+
   const mainTimeline = gsap.timeline({
     scrollTrigger: {
       scrub: 1,
@@ -65,6 +129,7 @@ function renderScrolling(contexts: Context, refs: Registry<any>) {
       end: () => `+=${pinWrap.clientWidth}`,
       onUpdate: ev => {
         pct = Math.min(ev.progress * (items.length - 1), 1);
+        updateBodyScrollBackground(ev.progress, pinWrap);
 
         gsap.to(shadow, {
           x: shadow.clientWidth - shadow.clientWidth * pct,
@@ -91,9 +156,6 @@ function renderScrolling(contexts: Context, refs: Registry<any>) {
     xPercent: -100 * (items.length - 1),
     ease: "none"
   });
-
-  gsap.to(pinWrap, { backgroundColor: 'inherit', duration: 0 });
-  gsap.to(pinWrap, { backgroundColor: '#080c1a', delay: 1, duration: 1 });
 
   const itemTimeline = gsap.timeline({
     scrollTrigger: {

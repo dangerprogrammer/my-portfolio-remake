@@ -23,7 +23,7 @@ const pagesList: page[] = [
     }
   },
   {
-    url: "/about-me", Page: AboutMePage, title: "About Me", Icon: Person, timeline: function (tl, item, setActivePage) {
+    url: "/about-me", Element: ({ globalContexts, ref }) => <AboutMePage />, Page: AboutMePage, title: "About Me", Icon: Person, timeline: function (tl, item, setActivePage) {
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 2");
       })
@@ -33,7 +33,7 @@ const pagesList: page[] = [
     }
   },
   {
-    url: "/skills", Page: SkillsPage, title: "Skills", Icon: Person, timeline: function (tl, item, setActivePage) {
+    url: "/skills", Element: ({ globalContexts, ref }) => <SkillsPage />, Page: SkillsPage, title: "Skills", Icon: Person, timeline: function (tl, item, setActivePage) {
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 3");
       })
@@ -43,7 +43,7 @@ const pagesList: page[] = [
     }
   },
   {
-    url: "/projects", Page: ProjectsPage, title: "Projects", Icon: Desktop, timeline: function (tl, item, setActivePage) {
+    url: "/projects", Element: ({ globalContexts, ref }) => <ProjectsPage />, Page: ProjectsPage, title: "Projects", Icon: Desktop, timeline: function (tl, item, setActivePage) {
       ShowElement(tl, item, setActivePage, this, () => {
         // console.log("item full visible 4");
       })

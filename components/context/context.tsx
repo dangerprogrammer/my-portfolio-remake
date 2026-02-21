@@ -7,16 +7,20 @@ import { Context } from "@/types";
 
 const ContextApp = createContext<Context>({} as Context);
 
+export const RefContext = ContextApp;
+
 function GlobalProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     const pathname = usePathname(),
         [history, setHistory] = useState([pathname]),
         [activePage, setActivePage] = useState(pagesList[0]),
-        [snapping, setSnapping] = useState(false);
+        [snapping, setSnapping] = useState(false),
+        [expandedContent, setExpandedContent] = useState(false);
 
     return <ContextApp.Provider value={{
         history, setHistory,
         activePage, setActivePage,
-        snapping, setSnapping
+        snapping, setSnapping,
+        expandedContent, setExpandedContent
     }}>
         {children}
     </ContextApp.Provider>

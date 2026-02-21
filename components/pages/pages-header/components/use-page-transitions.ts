@@ -93,17 +93,6 @@ export function usePageTransitions(
                 } else {
                     const validCards = cardItems.filter(Boolean);
                     if (validCards.length > 0) {
-                        // Animar botão saindo
-                        if (seeMoreBtn) {
-                            gsap.to(seeMoreBtn, {
-                                opacity: 0,
-                                yPercent: 50,
-                                scale: 0.95,
-                                duration: 0.2,
-                                ease: 'power1.out'
-                            });
-                        }
-
                         // Animar cards saindo
                         gsap.to(validCards, {
                             opacity: 0,
@@ -121,6 +110,35 @@ export function usePageTransitions(
             }
         } else {
             // Animações de saída quando volta para welcome
+            if (shadowTitleLine) {
+                gsap.to(shadowTitleLine, {
+                    scaleX: 0,
+                    duration: .25,
+                    ease: 'power1.out'
+                });
+            }
+
+            if (shadowTitle) {
+                gsap.to(shadowTitle, {
+                    opacity: 0,
+                    duration: .25,
+                    ease: 'power1.out'
+                });
+            }
+
+            // Ocultar todas as letras da descrição
+            if (descWords) {
+                Object.values(descWords).forEach((letterRef: any) => {
+                    if (letterRef) {
+                        gsap.to(letterRef, {
+                            y: '100%',
+                            duration: 0.2,
+                            ease: 'power1.out'
+                        });
+                    }
+                });
+            }
+
             if (contentCards) {
                 gsap.to(contentCards, {
                     opacity: 0,

@@ -58,12 +58,14 @@
             grid-template-columns: 1fr 1.5fr 1fr;
             width: 24em;
             gap: 1em;
+            overflow: hidden;
 
             li {
                 list-style: none;
                 display: flex;
                 line-height: 1.4em;
                 overflow-y: auto;
+                transition: transform .35s ease, opacity .35s ease;
 
                 span {
                     display: flex;
@@ -89,6 +91,16 @@
             .mainPageHeader {
                 text-align: center;
                 font-size: 1.4em;
+            }
+        }
+
+        &.expandedFocus {
+            .headerList {
+                > li:first-child,
+                > li:last-child {
+                    opacity: 0;
+                    transform: translateY(-140%);
+                }
             }
         }
     }

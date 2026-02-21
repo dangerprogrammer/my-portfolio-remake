@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from 'react';
 import { RefContext } from '@/components/context/context';
 import { useRefs } from '@/components/context/ref-context';
 import { FiArrowDown } from 'react-icons/fi';
-import styles from './skills.module.scss';
+import styles from '../expanded-page.module.scss';
 
 function SkillsPage() {
     const contexts = useContext(RefContext);
@@ -44,7 +44,7 @@ function SkillsPage() {
     }, [showExpanded, shadowRef]);
 
     return (
-        <section ref={sectionRef} className={`${styles.pageSection}${showExpanded ? ` ${styles.expanded}` : ''}`}>
+        <section ref={sectionRef} className={`${styles.pageSection}${showExpanded ? ` ${styles.expanded} ${styles.expandedStart}` : ''}`}>
             <div className={styles.placeholder}>Skills Page!</div>
             
             {showExpanded && (

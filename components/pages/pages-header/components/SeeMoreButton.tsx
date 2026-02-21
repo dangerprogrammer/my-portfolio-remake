@@ -1,6 +1,6 @@
 import styles from '../pages-header.module.scss';
 import { RefObject } from 'react';
-import { FiArrowDown } from 'react-icons/fi';
+import { FaChevronDown } from 'react-icons/fa';
 
 interface SeeMoreButtonProps {
     onSeeMore: () => void;
@@ -20,7 +20,7 @@ function SeeMoreButton({ onSeeMore, getRef }: SeeMoreButtonProps) {
         >
             <span className={styles.btnText}>See More</span>
             <span className={styles.btnIcon}>
-                <FiArrowDown aria-hidden="true" />
+                <FaChevronDown aria-hidden="true" />
             </span>
         </button>
     );

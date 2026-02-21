@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef } from 'react';
 import { RefContext } from '@/components/context/context';
 import { useRefs } from '@/components/context/ref-context';
-import { FiArrowDown } from 'react-icons/fi';
-import styles from './about-me.module.scss';
+import { FaChevronDown } from 'react-icons/fa';
+import styles from '../expanded-page.module.scss';
 
 function AboutMePage() {
     const contexts = useContext(RefContext);
@@ -73,7 +73,7 @@ function AboutMePage() {
                         onClick={() => contexts?.setExpandedContent?.(false)}
                     >
                         <span>Back to main page</span>
-                        <FiArrowDown aria-hidden="true" />
+                        <FaChevronDown aria-hidden="true" />
                     </button>
                 </div>
             )}
